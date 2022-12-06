@@ -3,15 +3,14 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { signIn, SignInResponse } from 'next-auth/react'
+import Router from 'next/router'
 
 function Copyright(props: any) {
     return (
@@ -28,14 +27,29 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function Signin() {
+    const [error, setError] = React.useState(false);
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+
         const data = new FormData(event.currentTarget);
-        console.log({
+
+        signIn('credentials', {
+            redirect: false,
             email: data.get('email'),
             password: data.get('password'),
-        });
+        })
+            .then((value: SignInResponse | undefined) => {
+                if (value && value.ok) {
+                    Router.push('/dashboard');
+                } else {
+                    setError(true)
+                }
+            })
+            // .catch(e => {
+            //     alert('2')
+            // })
     };
 
     return (
@@ -58,6 +72,7 @@ export default function SignIn() {
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
                         <TextField
+                            error={error}
                             margin="normal"
                             required
                             fullWidth
@@ -68,6 +83,8 @@ export default function SignIn() {
                             autoFocus
                         />
                         <TextField
+                            error={error}
+                            helperText={error ? 'Incorrect email or password.' : ''}
                             margin="normal"
                             required
                             fullWidth
@@ -77,10 +94,6 @@ export default function SignIn() {
                             id="password"
                             autoComplete="current-password"
                         />
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
                         <Button
                             type="submit"
                             fullWidth
@@ -89,18 +102,6 @@ export default function SignIn() {
                         >
                             Sign In
                         </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="#" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            {/*<Grid item>*/}
-                            {/*    <Link href="#" variant="body2">*/}
-                            {/*        {"Don't have an account? Sign Up"}*/}
-                            {/*    </Link>*/}
-                            {/*</Grid>*/}
-                        </Grid>
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
