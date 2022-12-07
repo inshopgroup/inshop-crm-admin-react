@@ -18,6 +18,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import Button from "@mui/material/Button";
+import {signOut, useSession} from "next-auth/react";
 
 const drawerWidth = 240;
 
@@ -72,7 +74,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function PersistentDrawerLeft() {
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -81,6 +83,8 @@ export default function PersistentDrawerLeft() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const {data: session, status} = useSession()
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -96,9 +100,11 @@ export default function PersistentDrawerLeft() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        Persistent drawer
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                        Inshop CRM
                     </Typography>
+                    <Typography>{session?.user?.name}</Typography>
+                    <Button onClick={() => signOut()} color="inherit">[ Logout ]</Button>
                 </Toolbar>
             </AppBar>
             <Drawer

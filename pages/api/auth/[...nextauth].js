@@ -20,9 +20,8 @@ export default NextAuth({
             //     password: { label: "Password", type: "password" }
             // },
             async authorize(credentials, req) {
-                // console.log(credentials)
-
-                const user = await axios.post('https://api.demo.inshopcrm.com/login', {
+                const user = await axios.post('http://localhost:8888/login', {
+                // const user = await axios.post('https://api.demo.inshopcrm.com/login', {
                     username: credentials.email,
                     password: credentials.password,
                 })
@@ -47,5 +46,31 @@ export default NextAuth({
             }
         })
     ],
+    callbacks: {
+        async jwt(data) {
+            // async jwt({ token, account }) {
+            // console.log('async jwt(data) {', data)
+            // Persist the OAuth access_token to the token right after signin
+
+            if (data.account) {
+                data.token.token = data.user.token
+                data.token.refresh_token = data.user.refresh_token
+                data.token.roles = data.user.roles
+                data.token.roles = data.user.roles
+                data.token.language = data.user.language
+            }
+
+            return data.token
+        },
+        async session({session, token, user}) {
+            // Send properties to the client, like an access_token from a provider.
+            session.token = token.token
+            session.refresh_token = token.refresh_token
+            session.roles = token.roles
+            session.language = token.language
+
+            return session
+        }
+    }
     // secret: process.env.NEXTAUTH_SECRET,
 })
