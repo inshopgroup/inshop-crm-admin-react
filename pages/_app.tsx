@@ -7,12 +7,24 @@ import { CacheProvider } from '@emotion/react';
 import theme from '../src/theme';
 import createEmotionCache from '../src/createEmotionCache';
 import { SessionProvider } from "next-auth/react"
+import DefaultLayout from '../layouts/DefaultLayout'
+import type { NextPage } from 'next'
+import type { AppProps } from 'next/app'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
 
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: React.ReactElement) => React.ReactNode
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+
 export default function MyApp(props: any) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const getLayout = Component.getLayout
 
   return (
         <CacheProvider value={emotionCache}>
@@ -23,7 +35,11 @@ export default function MyApp(props: any) {
             <ThemeProvider theme={theme}>
               {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
               <CssBaseline />
-              <Component {...pageProps} />
+              {getLayout ? getLayout(<Component {...pageProps} />) : (
+                <DefaultLayout>
+                  <Component {...pageProps} />
+                </DefaultLayout>
+              )}
             </ThemeProvider>
           </SessionProvider>
         </CacheProvider>
