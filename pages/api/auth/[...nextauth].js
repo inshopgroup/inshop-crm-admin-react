@@ -1,6 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth from "next-auth"
-import axios from "axios";
+import axios from '../../../src/axios';
 
 export default NextAuth({
     pages: {
