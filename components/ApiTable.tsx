@@ -18,7 +18,9 @@ import AddCircle from '@mui/icons-material/AddCircle';
 import { visuallyHidden } from '@mui/utils';
 import {useEffect, useState} from "react";
 import axios from '../src/axios'
-import Label from '../model/Label'
+// import Label from '../model/Label'
+import { loadingStart, loadingStop } from "../store/loaderSlice";
+import { useDispatch } from "react-redux";
 
 type Order = 'asc' | 'desc';
 
@@ -124,8 +126,12 @@ export default function ApiTable(props: ApiTableProps) {
     const [rows, setRows] = useState([])
     const [total, setTotal] = useState(0)
 
+    // const loadingState = useSelector(selectLoaderState);
+    const dispatch = useDispatch();
+
     // console.log('useEffect')
     useEffect(() => {
+        dispatch(loadingStart())
         axios.get('http://localhost:8888/labels')
             .then(response => response.data)
             .then(data => {
@@ -134,8 +140,10 @@ export default function ApiTable(props: ApiTableProps) {
 
                 setRows(data['hydra:member'])
                 setTotal(data['hydra:totalItems'])
-
                 // console.log(data, rows, totalItems)
+            })
+            .finally(() => {
+                dispatch(loadingStop())
             })
     }, [])
 

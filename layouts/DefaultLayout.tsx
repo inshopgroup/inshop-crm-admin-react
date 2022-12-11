@@ -17,6 +17,9 @@ import MailIcon from '@mui/icons-material/Mail';
 import Button from "@mui/material/Button";
 import {signOut, useSession} from "next-auth/react";
 import Footer from "./Footer";
+import { LinearProgress } from "@mui/material";
+import { selectLoaderState } from "../store/loaderSlice";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -37,6 +40,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function DefaultLayout({ children }) {
     const {data: session} = useSession()
+    const showLoader = useSelector(selectLoaderState) !== 0
 
     return (
         <Box
@@ -46,6 +50,11 @@ export default function DefaultLayout({ children }) {
                 minHeight: '100vh',
             }}
         >
+            {showLoader ?
+                <LinearProgress sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} /> :
+                ''
+            }
+
             <MuiAppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar>
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>

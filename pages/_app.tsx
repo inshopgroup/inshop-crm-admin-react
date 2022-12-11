@@ -10,6 +10,7 @@ import { SessionProvider } from "next-auth/react"
 import DefaultLayout from '../layouts/DefaultLayout'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+import { wrapper } from "../store/store";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -22,7 +23,7 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
-export default function MyApp(props: any) {
+const MyApp = function MyApp(props: any) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   const getLayout = Component.getLayout
 
@@ -51,3 +52,5 @@ MyApp.propTypes = {
   emotionCache: PropTypes.object,
   pageProps: PropTypes.object.isRequired,
 };
+
+export default wrapper.withRedux(MyApp);
