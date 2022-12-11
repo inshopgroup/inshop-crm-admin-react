@@ -131,7 +131,6 @@ export default function ApiTable(props: ApiTableProps) {
 
     // console.log('useEffect')
     useEffect(() => {
-        dispatch(loadingStart())
         axios.get('http://localhost:8888/labels')
             .then(response => response.data)
             .then(data => {
@@ -141,9 +140,6 @@ export default function ApiTable(props: ApiTableProps) {
                 setRows(data['hydra:member'])
                 setTotal(data['hydra:totalItems'])
                 // console.log(data, rows, totalItems)
-            })
-            .finally(() => {
-                dispatch(loadingStop())
             })
     }, [])
 

@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "./store";
 // import { HYDRATE } from "next-redux-wrapper";
 import Label from '../model/Label'
+import axios from '../src/axios'
 
 // Type for our state
 export interface LabelState {
@@ -19,6 +20,9 @@ export const labelSlice = createSlice({
     initialState,
     reducers: {
         setItemsState(state, action) {
+            state.items = action.payload;
+        },
+        loadItems(state, action) {
             state.items = action.payload;
         },
 

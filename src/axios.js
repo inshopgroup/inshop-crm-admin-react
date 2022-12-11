@@ -1,36 +1,33 @@
 import axios from 'axios'
-import {getSession} from "next-auth/react";
+import { getSession } from "next-auth/react";
+import { loadingStart, loadingStop } from "../store/loaderSlice";
 
-axios.interceptors.request.use(async request => {
-  const session = await getSession();
+export const initAxios = async (store) => {
+  axios.interceptors.request.use(async request => {
+    const session = await getSession();
 
-  if (session) {
-    request.headers.Authorization = 'Bearer ' + session.token
-  }
+    store.dispatch(loadingStart())
 
-  return request;
-}, error => {
-  console.log(error);
-  return Promise.reject(error);
-});
+    if (session) {
+      request.headers.Authorization = 'Bearer ' + session.token
+    }
 
-  // axios.onRequest((config) => {
-  //   // store.dispatch('loadingStart')
-  //
-  //   // const token = store.getters['auth/jwtDecoded'] || null
-  //   // const authorized = token && token.exp > Date.now() / 1000
-  //
-  //   if (authorized) {
-  //     config.headers.common.Authorization = 'Bearer ' + store.state.auth.token
-  //   }
-  //
-  //   return config
-  // })
-  //
-  // axios.onResponse((data) => {
-  //   // store.dispatch('loadingStop')
-  // })
-  //
+    return request;
+  }, error => {
+    console.log(error);
+    return Promise.reject(error);
+  });
+
+  axios.interceptors.response.use(response => {
+    store.dispatch(loadingStop())
+
+    return response;
+  }, error => {
+    console.log(error);
+    return Promise.reject(error);
+  });
+}
+
   // axios.onError((e) => {
   //   // store.dispatch('loadingStop')
   //
