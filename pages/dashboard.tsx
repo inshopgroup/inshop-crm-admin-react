@@ -1,48 +1,39 @@
 import * as React from 'react';
 import MainLayout from '../src/components/MainLayout'
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
+import {DataGrid} from '@mui/x-data-grid';
+import axios from "axios";
+import {useEffect, useState} from "react";
 
 
-export default function Dashboard() {
+function Dashboard() {
+    const [products, setProducts] = useState<[]>([])
+
+    const columns = [
+        { field: 'id', headerName: 'id', width: 100},
+        { field: 'title', headerName: 'title', width: 300},
+        { field: 'category', headerName: 'category',width: 150},
+        { field: 'price', headerName: 'price', width: 150},
+        { field: 'description', headerName: 'description', width: 350},
+
+    ];
+    function fetchProducts() {
+       axios.get<[]>('https://fakestoreapi.com/products').then(r => setProducts(r.data))
+        console.log(products)
+    }
+    useEffect(() => {
+        fetchProducts()
+
+    },[])
     return(
         <MainLayout>
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={8} lg={9}>
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: 240,
-                            }}
-                        >
-                            {/*<Chart />*/}
-                        </Paper>
-                    </Grid>
-                    {/* Recent Deposits */}
-                    <Grid item xs={12} md={4} lg={3}>
-                        <Paper
-                            sx={{
-                                p: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                height: 240,
-                            }}
-                        >
-                            {/*<Deposits />*/}
-                        </Paper>
-                    </Grid>
-                    {/* Recent Orders */}
-                    <Grid item xs={12}>
-                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                            {/*<Orders />*/}
-                        </Paper>
-                    </Grid>
-                </Grid>
+                <div style={{ height: 600, width: '100%' }}>
+                    <DataGrid rows={products} columns={columns} checkboxSelection />
+                </div>
             </Container>
         </MainLayout>
     )
 }
+
+export default Dashboard

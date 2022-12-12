@@ -19,6 +19,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import {ListItems} from './ListItems';
 import {Copyright} from "./Copyright";
 
+
 const drawerWidth: number = 240;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -144,13 +145,14 @@ const mdTheme = createTheme();
                         flexGrow: 1,
                         height: '100vh',
                         overflow: 'auto',
+                        position: 'relative'
                     }}
                 >
                     <Toolbar />
                     <main>
-                        {children}
+                        { children }
                     </main>
-                    <Copyright sx={{ pt: 4 }} />
+                    <Copyright sx={{ pt: 4, position: 'absolute', left: 0, right: 0, bottom: 0 }} />
                 </Box>
             </Box>
         </ThemeProvider>
