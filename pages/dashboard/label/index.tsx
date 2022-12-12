@@ -42,14 +42,12 @@ export default function LabelIndex() {
     const total: number = useSelector(selectLabelTotalItems)
 
     return (
-        <>
-            <ApiTable
-                title="Labels"
-                route="labels"
-                headCells={headCells}
-                rows={rows}
-                total={total}
-            ></ApiTable>
-        </>
+        <ApiTable
+            title="Labels"
+            route="labels"
+            headCells={headCells}
+            rows={rows}
+            total={total}
+        ></ApiTable>
     );
 }
