@@ -1,46 +1,43 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppState } from "./store";
-// import { HYDRATE } from "next-redux-wrapper";
 import Label from '../model/Label'
-import axios from '../src/axios'
 
-// Type for our state
 export interface LabelState {
     items: Label[];
+    totalItems: number;
+    error: string | null;
 }
 
-// Initial state
 const initialState: LabelState = {
     items: [],
+    totalItems: 0,
+    error: null,
 };
 
-// Actual Slice
 export const labelSlice = createSlice({
     name: "label",
     initialState,
     reducers: {
         setItemsState(state, action) {
-            state.items = action.payload;
+            console.log(action)
+            if (action.payload !== undefined) {
+                if (action.payload['hydra:member'] !== undefined) {
+                    state.items = action.payload['hydra:member']
+                }
+                if (action.payload['hydra:totalItems'] !== undefined) {
+                    state.totalItems = action.payload['hydra:totalItems']
+                }
+            }
         },
-        loadItems(state, action) {
-            state.items = action.payload;
+        setErrorState(state, action) {
+            state.error = action.payload
         },
-
-        // Special reducer for hydrating the state. Special case for next-redux-wrapper
-        // extraReducers: {
-        //     [HYDRATE]: (state, action) => {
-        //         return {
-        //             ...state,
-        //             ...action.payload.label,
-        //         };
-        //     },
-        // },
-
     },
 });
 
-export const { setItemsState } = labelSlice.actions;
+export const { setItemsState, setErrorState } = labelSlice.actions;
 
-export const selectLabelState = (state: AppState) => state.label.items;
+export const selectLabelItems = (state: AppState) => state.label.items;
+export const selectLabelTotalItems = (state: AppState) => state.label.totalItems;
 
 export default labelSlice.reducer;

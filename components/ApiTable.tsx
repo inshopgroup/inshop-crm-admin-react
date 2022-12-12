@@ -16,11 +16,6 @@ import Tooltip from '@mui/material/Tooltip';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AddCircle from '@mui/icons-material/AddCircle';
 import { visuallyHidden } from '@mui/utils';
-import {useEffect, useState} from "react";
-import axios from '../src/axios'
-// import Label from '../model/Label'
-import { loadingStart, loadingStop } from "../store/loaderSlice";
-import { useDispatch } from "react-redux";
 
 type Order = 'asc' | 'desc';
 
@@ -111,9 +106,8 @@ interface ApiTableProps {
     title: string
     route: string
     headCells: readonly HeadCell[]
-    // rows: any[],
-    // total: number
-    // type: any,
+    rows: any[],
+    total: number
 }
 
 export default function ApiTable(props: ApiTableProps) {
@@ -121,27 +115,6 @@ export default function ApiTable(props: ApiTableProps) {
     const [orderBy, setOrderBy] = React.useState<string>('name');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(25);
-
-
-    const [rows, setRows] = useState([])
-    const [total, setTotal] = useState(0)
-
-    // const loadingState = useSelector(selectLoaderState);
-    const dispatch = useDispatch();
-
-    // console.log('useEffect')
-    useEffect(() => {
-        axios.get('http://localhost:8888/labels')
-            .then(response => response.data)
-            .then(data => {
-                // const rows: Label[] = data['hydra:member']
-                // const totalItems: Number = data['hydra:totalItems']
-
-                setRows(data['hydra:member'])
-                setTotal(data['hydra:totalItems'])
-                // console.log(data, rows, totalItems)
-            })
-    }, [])
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -174,11 +147,11 @@ export default function ApiTable(props: ApiTableProps) {
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
+                            rowCount={props.rows.length}
                             headCells={props.headCells}
                         />
                         <TableBody>
-                            {rows.map((row, index) => {
+                            {props.rows.map((row, index) => {
                                 return (
                                     <TableRow
                                         hover
@@ -187,7 +160,7 @@ export default function ApiTable(props: ApiTableProps) {
                                     >
                                         {props.headCells.map((headCell, index) => {
                                             return (
-                                                <TableCell>{row[headCell.id].toString()}</TableCell>
+                                                <TableCell key={row.id + '_' + index}>{row[headCell.id].toString()}</TableCell>
                                             )
                                         })}
                                     </TableRow>
@@ -199,7 +172,7 @@ export default function ApiTable(props: ApiTableProps) {
                 <TablePagination
                     rowsPerPageOptions={[25, 50, 100]}
                     component="div"
-                    count={total}
+                    count={props.total}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
