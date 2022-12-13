@@ -119,7 +119,8 @@ export default function ApiTable(props: ApiTableProps) {
 
     props.loadHandler({
         itemsPerPage: rowsPerPage,
-        page: page + 1
+        page: page + 1,
+        ['order[' + orderBy + ']']: order,
     })
 
     const handleRequestSort = (
@@ -133,11 +134,6 @@ export default function ApiTable(props: ApiTableProps) {
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
-
-        props.loadHandler({
-            itemsPerPage: rowsPerPage,
-            page: newPage + 1
-        })
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {

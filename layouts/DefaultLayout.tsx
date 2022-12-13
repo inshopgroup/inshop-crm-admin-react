@@ -51,12 +51,11 @@ export default function DefaultLayout({ children }) {
                 minHeight: '100vh',
             }}
         >
-            {showLoader ?
-                <LinearProgress sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} /> :
-                ''
-            }
-
             <MuiAppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+                {showLoader ?
+                    <LinearProgress sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} /> :
+                    ''
+                }
                 <Toolbar>
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                         Inshop CRM
