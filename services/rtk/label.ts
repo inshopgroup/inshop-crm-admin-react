@@ -8,7 +8,7 @@ export const labelApi = createApi({
     }),
     endpoints: (builder) => ({
         getItems: builder.query({
-            query: () => ({ url: '/labels', method: 'get' })
+            query: (params: object) => ({ url: '/labels', method: 'get', params})
         }),
         getItem: builder.query({
             query: (id: number) => ({ url: `/labels/${id}`, method: 'get' })

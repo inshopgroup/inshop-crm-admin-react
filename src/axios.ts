@@ -6,11 +6,12 @@ import {ToolkitStore} from "@reduxjs/toolkit/dist/configureStore";
 
 export const initAxios = async (store: ToolkitStore) => {
     axios.interceptors.request.use(async request => {
-        const session = await getSession();
-
         store.dispatch(loadingStart())
 
+        const session = await getSession();
+
         if (session) {
+            // @ts-ignore
             request.headers.Authorization = 'Bearer ' + session.token
         }
 

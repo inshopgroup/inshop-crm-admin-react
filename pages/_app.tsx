@@ -20,6 +20,7 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: React.ReactElement) => React.ReactNode
 }
 
+// @ts-ignore
 const MyApp = function MyApp({ Component, ...rest }) {
   const { store, props } = wrapper.useWrappedStore(rest);
   const { emotionCache = clientSideEmotionCache, pageProps } = props;

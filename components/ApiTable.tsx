@@ -107,7 +107,8 @@ interface ApiTableProps {
     route: string
     headCells: readonly HeadCell[]
     rows: any[],
-    total: number
+    total: number,
+    loadHandler: any
 }
 
 export default function ApiTable(props: ApiTableProps) {
@@ -115,6 +116,11 @@ export default function ApiTable(props: ApiTableProps) {
     const [orderBy, setOrderBy] = React.useState<string>('name');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(25);
+
+    props.loadHandler({
+        itemsPerPage: rowsPerPage,
+        page: page + 1
+    })
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -127,6 +133,11 @@ export default function ApiTable(props: ApiTableProps) {
 
     const handleChangePage = (event: unknown, newPage: number) => {
         setPage(newPage);
+
+        props.loadHandler({
+            itemsPerPage: rowsPerPage,
+            page: newPage + 1
+        })
     };
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {

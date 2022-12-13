@@ -29,15 +29,17 @@ const headCells: readonly HeadCell[] = [
     },
 ];
 
-export default function LabelIndex() {
-    const { data, error } = useGetItemsQuery({})
+const loadData = (filters: object) => {
+    const { data, error } = useGetItemsQuery(filters)
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(setItemsState(data))
         dispatch(setErrorState(error))
     })
+}
 
+export default function LabelIndex() {
     const rows: Label[] = useSelector(selectLabelItems)
     const total: number = useSelector(selectLabelTotalItems)
 
@@ -48,6 +50,7 @@ export default function LabelIndex() {
             headCells={headCells}
             rows={rows}
             total={total}
+            loadHandler={loadData}
         ></ApiTable>
     );
 }

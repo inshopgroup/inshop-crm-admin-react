@@ -9,9 +9,9 @@ function Copyright() {
             {'Copyright © '}
             <Link color="inherit" target="_blank" href="https://inshopcrm.com/">
                 Inshop CRM
-            </Link>{' '}
+            </Link>
+            {', '}
             {new Date().getFullYear()}
-            {'.'}
         </Typography>
     );
 }

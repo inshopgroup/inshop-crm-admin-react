@@ -38,6 +38,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
+// @ts-ignore
 export default function DefaultLayout({ children }) {
     const {data: session} = useSession()
     const showLoader = useSelector(selectLoaderState) !== 0

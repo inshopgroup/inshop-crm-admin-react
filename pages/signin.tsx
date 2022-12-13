@@ -10,12 +10,17 @@ import { signIn, SignInResponse } from 'next-auth/react'
 import Router from 'next/router'
 import SigninLayout from '../layouts/SigninLayout'
 import type { NextPageWithLayout } from './_app'
+import {loadingStart, loadingStop} from "../store/loaderSlice";
+import {useDispatch} from "react-redux";
 
 const Page: NextPageWithLayout = () => {
     const [error, setError] = React.useState(false);
+    const dispatch = useDispatch();
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        dispatch(loadingStart())
+        setError(false)
 
         const data = new FormData(event.currentTarget);
 
@@ -25,6 +30,8 @@ const Page: NextPageWithLayout = () => {
             password: data.get('password'),
         })
             .then((value: SignInResponse | undefined) => {
+                dispatch(loadingStop())
+
                 if (value && value.ok) {
                     Router.push('/dashboard');
                 } else {
