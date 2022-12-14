@@ -14,7 +14,10 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import AddCircle from '@mui/icons-material/AddCircle';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 
 type Order = 'asc' | 'desc';
@@ -63,6 +66,9 @@ function EnhancedTableHead(props: EnhancedTableProps) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
+                <TableCell sx={{maxWidth: 100}}>
+                    Actions
+                </TableCell>
             </TableRow>
         </TableHead>
     );
@@ -90,7 +96,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             </Typography>
             <Tooltip title="Create new">
                 <IconButton>
-                    <AddCircle sx={{color: 'green'}} />
+                    <AddCircleIcon sx={{color: 'green'}} />
                 </IconButton>
             </Tooltip>
             <Tooltip title="Filter list">
@@ -171,6 +177,23 @@ export default function ApiTable(props: ApiTableProps) {
                                                 <TableCell key={row.id + '_' + index}>{row[headCell.id].toString()}</TableCell>
                                             )
                                         })}
+                                        <TableCell key={row.id + '_actions'} sx={{maxWidth: 100}}>
+                                            <Tooltip title="Show item">
+                                                <IconButton>
+                                                    <VisibilityIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Edit item">
+                                                <IconButton>
+                                                    <EditIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Delete item">
+                                                <IconButton>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </TableCell>
                                     </TableRow>
                                 );
                             })}
