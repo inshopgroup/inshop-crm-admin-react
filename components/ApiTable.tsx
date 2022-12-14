@@ -19,6 +19,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
+import Link from "next/link";
 
 type Order = 'asc' | 'desc';
 
@@ -179,9 +180,14 @@ export default function ApiTable(props: ApiTableProps) {
                                         })}
                                         <TableCell key={row.id + '_actions'} sx={{maxWidth: 100}}>
                                             <Tooltip title="Show item">
-                                                <IconButton>
-                                                    <VisibilityIcon />
-                                                </IconButton>
+                                                <Link href={{
+                                                    pathname: '/dashboard/label/show/[id]',
+                                                    query: { id: row.id }
+                                                }}>
+                                                    <IconButton>
+                                                        <VisibilityIcon />
+                                                    </IconButton>
+                                                </Link>
                                             </Tooltip>
                                             <Tooltip title="Edit item">
                                                 <IconButton>

@@ -34,7 +34,9 @@ export default function LabelShow() {
                             <TableCell component="th" scope="row" sx={{width: '50%'}}>
                                 {headCell.label}
                             </TableCell>
-                            <TableCell sx={{width: '50%'}}>{data[headCell.id]}</TableCell>
+                            <TableCell sx={{width: '50%'}}>
+                                {data[headCell.id].toString()}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
