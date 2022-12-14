@@ -1,29 +1,7 @@
 import * as React from 'react';
-import ApiTable, {HeadCell} from "../../../components/ApiTable";
+import ApiTable from "../../../components/ApiTable";
 import {useGetItemsQuery} from "../../../services/rtk/label";
-
-const headCells: readonly HeadCell[] = [
-    {
-        id: 'id',
-        label: 'ID',
-    },
-    {
-        id: 'name',
-        label: 'Name',
-    },
-    {
-        id: 'isActive',
-        label: 'Is active',
-    },
-    {
-        id: 'createdAt',
-        label: 'Created at',
-    },
-    {
-        id: 'updatedAt',
-        label: 'Updated at',
-    },
-];
+import {headCells} from "../../../model/Label";
 
 export default function LabelIndex() {
     return (
