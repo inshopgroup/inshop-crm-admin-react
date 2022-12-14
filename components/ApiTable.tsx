@@ -106,8 +106,6 @@ interface ApiTableProps {
     title: string
     route: string
     headCells: readonly HeadCell[]
-    rows: any[],
-    total: number,
     loadHandler: any
 }
 
@@ -117,11 +115,14 @@ export default function ApiTable(props: ApiTableProps) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
-    props.loadHandler({
+    const { data, error, isLoading } = props.loadHandler({
         itemsPerPage: rowsPerPage,
         page: page + 1,
         ['order[' + orderBy + ']']: order,
     })
+
+    const rows = data ? data['hydra:member'] : []
+    const total = data ? data['hydra:totalItems'] : 0
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -154,11 +155,11 @@ export default function ApiTable(props: ApiTableProps) {
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
-                            rowCount={props.rows.length}
+                            rowCount={total}
                             headCells={props.headCells}
                         />
                         <TableBody>
-                            {props.rows.map((row, index) => {
+                            {rows.map((row, index) => {
                                 return (
                                     <TableRow
                                         hover
@@ -179,7 +180,7 @@ export default function ApiTable(props: ApiTableProps) {
                 <TablePagination
                     rowsPerPageOptions={[25, 50, 100]}
                     component="div"
-                    count={props.total}
+                    count={total}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}

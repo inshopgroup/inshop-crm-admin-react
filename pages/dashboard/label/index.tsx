@@ -1,10 +1,6 @@
 import * as React from 'react';
 import ApiTable, {HeadCell} from "../../../components/ApiTable";
-import Label from '../../../model/Label'
 import {useGetItemsQuery} from "../../../services/rtk/label";
-import {selectLabelItems, selectLabelTotalItems, setErrorState, setItemsState} from "../../../store/labelSlice";
-import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
 
 const headCells: readonly HeadCell[] = [
     {
@@ -29,28 +25,13 @@ const headCells: readonly HeadCell[] = [
     },
 ];
 
-const loadData = (filters: object) => {
-    const { data, error } = useGetItemsQuery(filters)
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(setItemsState(data))
-        dispatch(setErrorState(error))
-    })
-}
-
 export default function LabelIndex() {
-    const rows: Label[] = useSelector(selectLabelItems)
-    const total: number = useSelector(selectLabelTotalItems)
-
     return (
         <ApiTable
             title="Labels"
             route="labels"
             headCells={headCells}
-            rows={rows}
-            total={total}
-            loadHandler={loadData}
+            loadHandler={useGetItemsQuery}
         ></ApiTable>
     );
 }
