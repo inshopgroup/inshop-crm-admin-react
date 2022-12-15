@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useGetItemQuery} from "../../../../services/rtk/label";
-import {headCells} from "../../../../model/Label";
+import Label, {headCells} from "../../../../model/Label";
 import {useRouter} from "next/router";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,13 +9,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import {skipToken} from "@reduxjs/toolkit/query";
 
 export default function LabelShow() {
     const router = useRouter()
     const { id } = router.query
-
-    // @ts-ignore
-    const {data, error, isLoading} = useGetItemQuery(parseInt(id))
+    const { data }: { data?: Label | undefined; } = useGetItemQuery(id ? parseInt(id) : skipToken)
 
     return (
         <TableContainer component={Paper}>
