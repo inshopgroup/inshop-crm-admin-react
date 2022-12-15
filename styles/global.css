@@ -10,3 +10,11 @@
 .navigation-link.active svg {
   color: #757ce8;
 }
+
+.container {
+  display: flex;
+  margin-top: 10px;
+}
+.cash {
+  margin: 0 10px;
+}

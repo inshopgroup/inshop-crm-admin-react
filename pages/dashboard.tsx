@@ -23,6 +23,7 @@ function Dashboard() {
         setLoading(true)
         axios.get<[]>('https://fakestoreapi.com/products').then(r => setProducts(r.data))
         setLoading(false)
+
     }
     useEffect(() => {
         fetchProducts()
