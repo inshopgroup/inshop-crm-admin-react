@@ -17,8 +17,8 @@ import MailIcon from '@mui/icons-material/Mail';
 import Button from "@mui/material/Button";
 import {signOut, useSession} from "next-auth/react";
 import Footer from "./Footer";
-import { LinearProgress } from "@mui/material";
-import { selectLoaderState } from "../store/loaderSlice";
+import {Alert, LinearProgress} from "@mui/material";
+import {selectErrorState, selectLoaderState} from "../store/loaderSlice";
 import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
@@ -42,6 +42,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 export default function DefaultLayout({ children }) {
     const {data: session} = useSession()
     const showLoader = useSelector(selectLoaderState) !== 0
+    const error = useSelector(selectErrorState)
 
     return (
         <Box
@@ -104,6 +105,8 @@ export default function DefaultLayout({ children }) {
             </Drawer>
             <Main>
                 <DrawerHeader />
+                {error && <Alert severity="error" sx={{marginBottom: 3}}>{error}</Alert>}
+
                 {children}
             </Main>
             <Footer/>

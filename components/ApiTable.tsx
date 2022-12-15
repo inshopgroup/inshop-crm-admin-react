@@ -20,7 +20,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import Link from "next/link";
-import {Alert} from "@mui/material";
 
 type Order = 'asc' | 'desc';
 
@@ -152,8 +151,6 @@ export default function ApiTable(props: ApiTableProps) {
 
     return (
         <Box sx={{ width: '100%' }}>
-            {error && <Alert severity="error" sx={{marginBottom: 3}}>Something went wrong, can't load data</Alert>}
-
             <Paper sx={{ width: '100%', mb: 2 }}>
                 <EnhancedTableToolbar title={props.title} />
                 <TableContainer>

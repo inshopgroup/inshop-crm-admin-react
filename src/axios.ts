@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosRequestConfig} from 'axios'
 import {getSession} from "next-auth/react";
-import {loadingStart, loadingStop} from "../store/loaderSlice";
+import {loadingStart, loadingStop, setError} from "../store/loaderSlice";
 import type {BaseQueryFn} from '@reduxjs/toolkit/query'
 import {ToolkitStore} from "@reduxjs/toolkit/dist/configureStore";
 import {signOut} from "next-auth/react";
@@ -8,6 +8,7 @@ import {signOut} from "next-auth/react";
 export const initAxios = async (store: ToolkitStore) => {
     axios.interceptors.request.use(async request => {
         store.dispatch(loadingStart())
+        store.dispatch(setError(null))
 
         const session = await getSession();
 
@@ -28,6 +29,7 @@ export const initAxios = async (store: ToolkitStore) => {
         return response;
     }, error => {
         store.dispatch(loadingStop())
+        store.dispatch(setError("Something went wrong, can't load data"))
 
         if (error.response.status === 401) {
             signOut();
