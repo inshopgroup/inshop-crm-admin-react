@@ -3,6 +3,7 @@ import {getSession} from "next-auth/react";
 import {loadingStart, loadingStop} from "../store/loaderSlice";
 import type {BaseQueryFn} from '@reduxjs/toolkit/query'
 import {ToolkitStore} from "@reduxjs/toolkit/dist/configureStore";
+import {signOut} from "next-auth/react";
 
 export const initAxios = async (store: ToolkitStore) => {
     axios.interceptors.request.use(async request => {
@@ -27,25 +28,15 @@ export const initAxios = async (store: ToolkitStore) => {
         return response;
     }, error => {
         store.dispatch(loadingStop())
+
+        if (error.response.status === 401) {
+            signOut();
+        }
+
         console.log(error);
         return Promise.reject(error);
     });
 }
-
-// axios.onError((e) => {
-//   // store.dispatch('loadingStop')
-//
-//   const code = parseInt(e.response && e.response.status)
-//   if (code === 401) {
-//     store.dispatch('auth/logout').then(() => {
-//       redirect('/')
-//     })
-//   }
-//
-//   if (code === 404) {
-//     return error({ statusCode: 404, message: e.message })
-//   }
-// })
 
 export const axiosBaseQuery = (
     {baseUrl}: { baseUrl: string } = {baseUrl: ''}
