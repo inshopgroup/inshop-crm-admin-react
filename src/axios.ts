@@ -26,6 +26,7 @@ export const initAxios = async (store: ToolkitStore) => {
 
         return response;
     }, error => {
+        store.dispatch(loadingStop())
         console.log(error);
         return Promise.reject(error);
     });

@@ -166,7 +166,7 @@ export default function ApiTable(props: ApiTableProps) {
                             headCells={props.headCells}
                         />
                         <TableBody>
-                            {rows.map((row, index) => {
+                            {rows.map((row: any) => {
                                 return (
                                     <TableRow
                                         hover
@@ -190,9 +190,14 @@ export default function ApiTable(props: ApiTableProps) {
                                                 </Link>
                                             </Tooltip>
                                             <Tooltip title="Edit item">
-                                                <IconButton>
-                                                    <EditIcon />
-                                                </IconButton>
+                                                <Link href={{
+                                                    pathname: '/dashboard/label/edit/[id]',
+                                                    query: { id: row.id }
+                                                }}>
+                                                    <IconButton>
+                                                        <EditIcon />
+                                                    </IconButton>
+                                                </Link>
                                             </Tooltip>
                                             <Tooltip title="Delete item">
                                                 <IconButton>

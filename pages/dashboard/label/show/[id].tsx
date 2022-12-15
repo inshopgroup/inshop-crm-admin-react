@@ -14,6 +14,7 @@ export default function LabelShow() {
     const router = useRouter()
     const { id } = router.query
 
+    // @ts-ignore
     const {data, error, isLoading} = useGetItemQuery(parseInt(id))
 
     return (
