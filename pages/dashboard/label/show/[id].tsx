@@ -32,12 +32,14 @@ export default function LabelShow() {
                             key={headCell.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                            <TableCell component="th" scope="row" sx={{width: '50%'}}>
-                                {headCell.label}
-                            </TableCell>
-                            <TableCell sx={{width: '50%'}}>
-                                {data[headCell.id].toString()}
-                            </TableCell>
+                            {headCell.visibleInShow && <>
+                                <TableCell component="th" scope="row" sx={{width: '50%'}}>
+                                    {headCell.label}
+                                </TableCell>
+                                <TableCell sx={{width: '50%'}}>
+                                    {data[headCell.id].toString()}
+                                </TableCell>
+                            </>}
                         </TableRow>
                     ))}
                 </TableBody>

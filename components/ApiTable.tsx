@@ -26,6 +26,9 @@ type Order = 'asc' | 'desc';
 export interface HeadCell {
     id: string;
     label: string;
+    visibleInList: boolean
+    visibleInShow: boolean
+    visibleInEdit: boolean
 }
 
 interface EnhancedTableProps {
@@ -47,6 +50,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
         <TableHead>
             <TableRow>
                 {props.headCells.map((headCell) => (
+                    headCell.visibleInList &&
                     <TableCell
                         key={headCell.id}
                         align='left'
@@ -117,8 +121,8 @@ interface ApiTableProps {
 }
 
 export default function ApiTable(props: ApiTableProps) {
-    const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<string>('name');
+    const [order, setOrder] = React.useState<Order>('desc');
+    const [orderBy, setOrderBy] = React.useState<string>('id');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
@@ -175,6 +179,7 @@ export default function ApiTable(props: ApiTableProps) {
                                     >
                                         {props.headCells.map((headCell, index) => {
                                             return (
+                                                headCell.visibleInList &&
                                                 <TableCell key={row.id + '_' + index}>{row[headCell.id].toString()}</TableCell>
                                             )
                                         })}
