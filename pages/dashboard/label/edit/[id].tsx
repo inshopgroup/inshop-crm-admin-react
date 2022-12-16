@@ -1,23 +1,88 @@
 import * as React from 'react';
-import {useGetItemQuery} from "../../../../services/rtk/label";
-import {headCells} from "../../../../model/Label";
+import {useGetLabelQuery, useEditLabelMutation} from "../../../../services/rtk/label";
+import Label, {headCells} from "../../../../model/Label";
 import {useRouter} from "next/router";
-import {FormControl, FormHelperText, Input, InputLabel} from "@mui/material";
+import {
+    Checkbox,
+    FormControlLabel,
+    Grid,
+} from "@mui/material";
+import PageHeader from "../../../../layouts/PageHeader";
+import {skipToken} from "@reduxjs/toolkit/query";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import {useEffect, useState} from "react";
+import {setSnackbar} from "../../../../store/loaderSlice";
+import {useDispatch} from "react-redux";
 
-export default function LabelShow() {
+export default function LabelEdit() {
     const router = useRouter()
-    const { id } = router.query
+    const dispatch = useDispatch()
+    const [editLabel, { isLoading }] = useEditLabelMutation()
 
-    // @ts-ignore
-    const {data, error, isLoading} = useGetItemQuery(parseInt(id))
+    const [item, setItem] = useState({
+        name: '',
+        isActive: false,
+    });
+
+    const { id } = router.query
+    const { data }: { data?: Label } = useGetLabelQuery(id ? parseInt(id.toString()) : skipToken)
+
+    useEffect(() => {
+        if (data) {
+            setItem({ ...data })
+        }
+    }, [data])
+
+    const handleChange = (e: any) => {
+        setItem({
+            ...item,
+            [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
+        });
+    }
+
+    const handleSubmit = async (e: any) => {
+        e.preventDefault()
+
+        editLabel(item).then(response => {
+            dispatch(setSnackbar({
+                message: 'Successfully saved',
+                severity: 'success',
+            }))
+
+            // history.push(`/labels/${postId}`)
+        }).catch(e => {
+            console.log('errror', e)
+        })
+    }
 
     return (
+        data &&
         <>
-            <FormControl>
-                <InputLabel htmlFor="my-input">Email address</InputLabel>
-                <Input id="my-input" aria-describedby="my-helper-text" />
-                <FormHelperText id="my-helper-text">We'll never share your email.</FormHelperText>
-            </FormControl>
+            <PageHeader title={data.name}></PageHeader>
+
+            <form onSubmit={handleSubmit}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField fullWidth name="name" label="Name" value={item.name} onChange={handleChange} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormControlLabel
+                            label="Is Active"
+                            control={
+                                <Checkbox
+                                    name="isActive"
+                                    checked={item.isActive}
+                                    onChange={handleChange}
+                                />
+                            }
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button type="submit" variant="contained">Save</Button>
+                    </Grid>
+                </Grid>
+            </form>
         </>
     );
 }

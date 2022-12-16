@@ -20,6 +20,7 @@ import Footer from "./Footer";
 import {Alert, LinearProgress} from "@mui/material";
 import {selectErrorState, selectLoaderState} from "../store/loaderSlice";
 import { useSelector } from "react-redux";
+import SnackbarAlert from "./SnackbarAlert";
 
 const drawerWidth = 240;
 
@@ -105,11 +106,11 @@ export default function DefaultLayout({ children }) {
             </Drawer>
             <Main>
                 <DrawerHeader />
-                {error && <Alert severity="error" sx={{marginBottom: 3}}>{error}</Alert>}
-
+                {error && <Alert variant="filled" severity="error" sx={{marginBottom: 3}}>{error}</Alert>}
                 {children}
             </Main>
             <Footer/>
+            <SnackbarAlert/>
         </Box>
     )
 }

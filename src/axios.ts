@@ -19,7 +19,7 @@ export const initAxios = async (store: ToolkitStore) => {
 
         return request;
     }, error => {
-        console.log(error);
+        // console.log(error);
         return Promise.reject(error);
     });
 
@@ -29,13 +29,12 @@ export const initAxios = async (store: ToolkitStore) => {
         return response;
     }, error => {
         store.dispatch(loadingStop())
-        store.dispatch(setError("Something went wrong, can't load data"))
+        store.dispatch(setError("Something went wrong, can't proceed request"))
 
         if (error.response.status === 401) {
             signOut();
         }
 
-        console.log(error);
         return Promise.reject(error);
     });
 }

@@ -80,7 +80,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface EnhancedTableToolbarProps {
-    title: string,
+    // title: string,
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
@@ -97,7 +97,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
                 id="tableTitle"
                 component="div"
             >
-                {props.title}
+                TODO: REMOVE ME
             </Typography>
             <Tooltip title="Create new">
                 <IconButton>
@@ -114,7 +114,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 }
 
 interface ApiTableProps {
-    title: string
     route: string
     headCells: readonly HeadCell[]
     loadHandler: any
