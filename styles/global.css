@@ -15,6 +15,11 @@
   display: flex;
   margin-top: 10px;
 }
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .cash {
   margin: 0 10px;
 }
