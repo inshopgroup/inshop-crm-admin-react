@@ -155,7 +155,7 @@ export default function ApiTable(props: ApiTableProps) {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar title={props.title} />
+                <EnhancedTableToolbar />
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}

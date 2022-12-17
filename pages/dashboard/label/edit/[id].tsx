@@ -1,19 +1,16 @@
 import * as React from 'react';
 import {useGetLabelQuery, useEditLabelMutation} from "../../../../services/rtk/label";
-import Label, {headCells} from "../../../../model/Label";
+import Label from "../../../../model/Label";
 import {useRouter} from "next/router";
-import {
-    Checkbox,
-    FormControlLabel,
-    Grid,
-} from "@mui/material";
+import {Grid} from "@mui/material";
 import PageHeader from "../../../../layouts/PageHeader";
 import {skipToken} from "@reduxjs/toolkit/query";
-import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import {useEffect, useState} from "react";
 import {setSnackbar} from "../../../../store/loaderSlice";
 import {useDispatch} from "react-redux";
+import FormInput from "../../../../components/forms/FormInput";
+import FormCheckbox from "../../../../components/forms/FormCheckbox";
 
 export default function LabelEdit() {
     const router = useRouter()
@@ -24,7 +21,7 @@ export default function LabelEdit() {
         name: '',
         isActive: false,
     });
-    const [violations, setViolations] = useState({});
+    const [violations, setViolations] = useState([]);
 
     const { id } = router.query
     const { data }: { data?: Label } = useGetLabelQuery(id ? parseInt(id.toString()) : skipToken)
@@ -44,6 +41,7 @@ export default function LabelEdit() {
 
     const handleSubmit = (e: any) => {
         e.preventDefault()
+        setViolations([])
 
         editLabel(item).then(response => {
             if (response.error) {
@@ -65,19 +63,22 @@ export default function LabelEdit() {
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <TextField fullWidth name="name" label="Name" value={item.name} onChange={handleChange} />
+                        <FormInput
+                            violations={violations}
+                            property="name"
+                            value={item.name}
+                            label="Name"
+                            onChange={handleChange}
+                        ></FormInput>
                     </Grid>
                     <Grid item xs={12}>
-                        <FormControlLabel
-                            label="Is Active"
-                            control={
-                                <Checkbox
-                                    name="isActive"
-                                    checked={item.isActive}
-                                    onChange={handleChange}
-                                />
-                            }
-                        />
+                        <FormCheckbox
+                            violations={violations}
+                            property="isActive"
+                            label="Is active"
+                            value={item.isActive}
+                            onChange={handleChange}
+                        ></FormCheckbox>
                     </Grid>
                     <Grid item xs={12}>
                         <Button type="submit" variant="contained">Save</Button>
