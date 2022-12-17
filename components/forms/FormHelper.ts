@@ -1,4 +1,5 @@
-import {ChangeEvent} from "react";
+import {ChangeEvent, Dispatch} from "react";
+import {setSnackbar} from "../../store/loaderSlice";
 
 export interface ViolationInterface {
     code: string;
@@ -16,4 +17,19 @@ export interface FormPropsInterface {
 
 export const findViolation = (violations: ViolationInterface[], property: string) => {
     return violations.find(violation => violation.propertyPath === property)
+}
+
+export const proceedResponse = (response: any, setViolations: Function, dispatch: Dispatch<any>) => {
+    if (response.error) {
+        if (response.error.data && response.error.data.violations) {
+            setViolations(response.error.data.violations)
+        }
+    } else {
+        dispatch(setSnackbar({
+            message: 'Successfully saved',
+            severity: 'success',
+        }))
+
+        return response
+    }
 }

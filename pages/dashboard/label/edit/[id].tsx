@@ -5,9 +5,9 @@ import {useRouter} from "next/router";
 import PageHeader from "../../../../layouts/PageHeader";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {useEffect, useState} from "react";
-import {setSnackbar} from "../../../../store/loaderSlice";
 import {useDispatch} from "react-redux";
 import LabelForm from "../../../../components/LabelForm";
+import {proceedResponse} from "../../../../components/forms/FormHelper";
 
 export default function LabelEdit() {
     const router = useRouter()
@@ -37,16 +37,7 @@ export default function LabelEdit() {
         e.preventDefault()
         setViolations([])
 
-        editLabel(item).then(response => {
-            if (response.error) {
-                setViolations(response.error.data.violations)
-            } else {
-                dispatch(setSnackbar({
-                    message: 'Successfully saved',
-                    severity: 'success',
-                }))
-            }
-        })
+        editLabel(item).then(response => proceedResponse(response, setViolations, dispatch))
     }
 
     return (
