@@ -18,8 +18,8 @@ import Button from "@mui/material/Button";
 import {signOut, useSession} from "next-auth/react";
 import Footer from "./Footer";
 import {Alert, LinearProgress} from "@mui/material";
-import {selectErrorState, selectLoaderState} from "../store/loaderSlice";
-import { useSelector } from "react-redux";
+import {selectErrorState, selectLoaderState, setError} from "../store/loaderSlice";
+import {useDispatch, useSelector} from "react-redux";
 import SnackbarAlert from "./SnackbarAlert";
 
 const drawerWidth = 240;
@@ -42,8 +42,13 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 // @ts-ignore
 export default function DefaultLayout({ children }) {
     const {data: session} = useSession()
+    const dispatch = useDispatch()
     const showLoader = useSelector(selectLoaderState) !== 0
     const error = useSelector(selectErrorState)
+
+    const handleAlertClose = () => {
+       dispatch(setError(null))
+    }
 
     return (
         <Box
@@ -106,7 +111,15 @@ export default function DefaultLayout({ children }) {
             </Drawer>
             <Main>
                 <DrawerHeader />
-                {error && <Alert variant="filled" severity="error" sx={{marginBottom: 3}}>{error}</Alert>}
+                {error &&
+                    <Alert
+                        variant="filled"
+                        severity="error"
+                        sx={{marginBottom: 3}}
+                        onClose={handleAlertClose}
+                    >{error}</Alert>
+                }
+
                 {children}
             </Main>
             <Footer/>

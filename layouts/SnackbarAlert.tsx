@@ -20,12 +20,17 @@ export default function SnackbarAlert() {
         <>
             {!!snackbarState &&
                 <Snackbar
-                    autoHideDuration={60000}
+                    autoHideDuration={30000}
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                     open={true}
                     onClose={handleSnackBarClose}
                 >
-                    <Alert variant="filled" severity={snackbarState.severity} sx={{ width: '100%' }}>
+                    <Alert
+                        variant="filled"
+                        severity={snackbarState.severity}
+                        sx={{ width: '100%' }}
+                        onClose={handleSnackBarClose}
+                    >
                         {snackbarState.message}
                     </Alert>
                 </Snackbar>

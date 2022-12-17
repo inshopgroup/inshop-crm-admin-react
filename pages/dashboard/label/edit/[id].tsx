@@ -24,6 +24,7 @@ export default function LabelEdit() {
         name: '',
         isActive: false,
     });
+    const [violations, setViolations] = useState({});
 
     const { id } = router.query
     const { data }: { data?: Label } = useGetLabelQuery(id ? parseInt(id.toString()) : skipToken)
@@ -41,18 +42,18 @@ export default function LabelEdit() {
         });
     }
 
-    const handleSubmit = async (e: any) => {
+    const handleSubmit = (e: any) => {
         e.preventDefault()
 
         editLabel(item).then(response => {
-            dispatch(setSnackbar({
-                message: 'Successfully saved',
-                severity: 'success',
-            }))
-
-            // history.push(`/labels/${postId}`)
-        }).catch(e => {
-            console.log('errror', e)
+            if (response.error) {
+                setViolations(response.error.data.violations)
+            } else {
+                dispatch(setSnackbar({
+                    message: 'Successfully saved',
+                    severity: 'success',
+                }))
+            }
         })
     }
 
