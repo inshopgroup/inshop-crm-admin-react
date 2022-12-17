@@ -1,11 +1,11 @@
 import {HeadCell} from "../components/ApiTable";
 
-export default interface Label {
-    id: number;
-    name: string;
-    isActive: boolean;
-    createdAt: string;
-    updatedAt: string;
+export default class Label {
+    id: number | undefined = undefined;
+    name: string = '';
+    isActive: boolean = false;
+    createdAt: string | undefined = undefined;
+    updatedAt: string | undefined = undefined;
 }
 
 export const headCells: readonly HeadCell[] = [

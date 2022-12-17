@@ -19,7 +19,7 @@ export default function FormCheckbox (props: FormPropsInterface) {
                     />
                 }
             />
-            {error && <FormHelperText error={error}>{violation.message}</FormHelperText>}
+            {error && <FormHelperText error={true}>{violation.message}</FormHelperText>}
         </>
     )
 }
