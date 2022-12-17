@@ -1,6 +1,6 @@
-# INSHOP CRM / ERP / ECOMMERCE
+# INSHOP CRM
 
-Inshop CRM / ERP is powerful framework which allows to build systems for business with different workflows.
+Inshop CRM is powerful framework which allows to build systems for business with different workflows.
 It has on board multi language support, clients management, projects & tasks, documents, simple accounting, inventory management, 
 orders & invoice management, possibilities to integrate with third party software, REST API, and many other features.
 
@@ -33,182 +33,33 @@ https://demo.inshopcrm.com/signin
 
 ## Technologies
 
+### Admin panel (Current project)
+- React, Next.js, Redux, RTK Query, MUI
+- Docker
+- GIT
+
+VueJS version can be found here https://github.com/inshopgroup/inshop-crm-admin
+
 ### Backend
  - PHP 8.2
  - Symfony 6
  - API Platform
  - Postgres
- - Elasticsearch
- 
-### Admin panel
- - React, Next.js, Redux, RTK Query, MUI
- - Docker
- - GIT
-
 
 # Installation
-
-## Using docker-compose for local testing
-
-.env
-```dotenv
-PORT_API=8888
-PORT_CLIENT=8080
-PORT_ECOMMERCE=8081
-
-DATABASE_NAME=api
-DATABASE_USER=api
-DATABASE_PASSWORD=!ChangeMe!
-
-JWT_PASSPHRASE=!ChangeMe!
-COMPOSE_PROJECT_NAME=inshop-crm
-```
-
-docker-compose.yml
-
-```
-version: '3.2'
-
-services:
-  ecommerce:
-    restart: always
-    image: inshopgroup/inshop-crm-ecommerce
-    user: node
-    working_dir: /var/www
-    environment:
-      NODE_ENV: production
-      HOST: 0.0.0.0
-    ports:
-      - ${PORT_ECOMMERCE}:3000
-    command: "npm start"
-
-  client:
-    restart: always
-    image: inshopgroup/inshop-crm-client
-    user: node
-    working_dir: /var/www
-    environment:
-      NODE_ENV: production
-      HOST: 0.0.0.0
-    ports:
-      - ${PORT_CLIENT}:80
-    command: "npm start"
-
-  php:
-    restart: always
-    image: inshopgroup/inshop-crm-api-php-fpm
-    depends_on:
-      - db
-    volumes:
-      - files-data:/var/www/data
-      - images-data:/var/www/public/images
-    networks:
-      - api
-
-  nginx:
-    restart: always
-    image: inshopgroup/inshop-crm-api-nginx
-    depends_on:
-      - php
-    ports:
-      - ${PORT_API}:80
-    volumes:
-      - images-data:/var/www/images
-    networks:
-      - api
-
-  db:
-    restart: always
-    image: postgres:9.5-alpine
-    environment:
-      - POSTGRES_DB=${DATABASE_NAME}
-      - POSTGRES_USER=${DATABASE_USER}
-      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
-    volumes:
-      - db-data:/var/lib/postgresql/data:rw
-    networks:
-      - api
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.1
-    environment:
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - es-data:/usr/share/elasticsearch/data
-    networks:
-      - api
-      - esnet
-
-  redis:
-    image: redis:latest
-    volumes:
-      - redis-data:/var/lib/redis
-    networks:
-      - api
-      
-volumes:
-  es-data: {}
-  db-data: {}
-  files-data: {}
-  images-data: {}
-  redis-data: {}
-
-networks:
-    api:
-    esnet:
-
-```
 
 ## For developers
 
 ```bash
-mkdir inshop-crm
-cd inshop-crm
-
-# api
-git clone git@github.com:inshopgroup/inshop-crm-api.git
-cd inshop-crm-api
-cp .env.dist .env
-docker-compose up -d
-cd ..
-
-# client
-git clone git@github.com:inshopgroup/inshop-crm-client.git
-cd inshop-crm-client
-cp .env.dist .env
-yarn install
-yarn run dev
-cd ..
-
-# ecommerce
-git clone git@github.com:inshopgroup/inshop-crm-ecommerce.git
-cd inshop-crm-ecommerce
+# admin
+git clone git@github.com:inshopgroup/inshop-crm-admin-react.git
+cd inshop-crm-admin-react
 cp .env.dist .env
 yarn install
 yarn run dev
 cd ..
 ```
 
-## Setup database & fixtures
+## Setup backend
 
-```bash
-docker-compose exec --user=www-data php sh ./setup.sh
-```
-
-Enter pass phrase for config/jwt/private.pem: **!ChangeMe!**  
-
-**NOTE!** described setup is only for local use!
-
-Enjoy, after run, API will be available under [http://localhost:8888/docs](http://localhost:8888/docs)
-
-Client - [http://localhost:3000](http://localhost:3000)
-
-```
-username: demo
-password: demo
-```
+For more details check API repository https://github.com/inshopgroup/inshop-crm-api
