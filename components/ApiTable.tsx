@@ -20,6 +20,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import Link from "next/link";
+import {setSnackbar} from "../store/loaderSlice";
+import {useDispatch} from "react-redux";
 
 type Order = 'asc' | 'desc';
 
@@ -117,6 +119,7 @@ interface ApiTableProps {
     route: string
     headCells: readonly HeadCell[]
     loadHandler: any
+    deleteAction: Function
 }
 
 export default function ApiTable(props: ApiTableProps) {
@@ -124,6 +127,8 @@ export default function ApiTable(props: ApiTableProps) {
     const [orderBy, setOrderBy] = React.useState<string>('id');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(25);
+
+    const dispatch = useDispatch();
 
     const { data, error, isLoading } = props.loadHandler({
         itemsPerPage: rowsPerPage,
@@ -133,6 +138,19 @@ export default function ApiTable(props: ApiTableProps) {
 
     const rows = data ? data['hydra:member'] : []
     const total = data ? data['hydra:totalItems'] : 0
+
+    const handleDelete = (id: number) => {
+        if (confirm('Are you sure?')) {
+            props.deleteAction(id).then((response: any) => {
+                if (!response.error) {
+                    dispatch(setSnackbar({
+                        message: 'Successfully deleted',
+                        severity: 'success',
+                    }))
+                }
+            })
+        }
+    }
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -204,7 +222,7 @@ export default function ApiTable(props: ApiTableProps) {
                                                 </Link>
                                             </Tooltip>
                                             <Tooltip title="Delete item">
-                                                <IconButton>
+                                                <IconButton onClick={() => handleDelete(row.id)}>
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </Tooltip>

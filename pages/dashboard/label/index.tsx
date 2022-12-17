@@ -1,10 +1,12 @@
 import * as React from 'react';
 import ApiTable from "../../../components/ApiTable";
-import {useGetLabelsQuery} from "../../../services/rtk/label";
+import {useGetLabelsQuery, useDeleteLabelMutation} from "../../../services/rtk/label";
 import {headCells} from "../../../model/Label";
 import PageHeader from "../../../layouts/PageHeader";
 
 export default function LabelIndex() {
+    const [deleteLabel] = useDeleteLabelMutation()
+
     return (
         <>
             {<PageHeader title="Labels"></PageHeader>}
@@ -12,6 +14,7 @@ export default function LabelIndex() {
                 route="labels"
                 headCells={headCells}
                 loadHandler={useGetLabelsQuery}
+                deleteAction={deleteLabel}
             ></ApiTable>
         </>
     );

@@ -13,7 +13,7 @@ export const labelApi = createApi({
             query: (params: object) => ({ url: '/labels', method: 'get', params}),
             providesTags: (result = [], error, arg) => [
                 { type: 'Label', id: 'NEW' },
-                ...result['hydra:member'].map(({ id } : { id: number }) => ({ type: 'Post', id }))
+                ...result['hydra:member'].map(({ id } : { id: number }) => ({ type: 'Label', id }))
             ]
         }),
         getLabel: builder.query({
@@ -26,13 +26,8 @@ export const labelApi = createApi({
                 method: 'POST',
                 data: item
             }),
-            invalidatesTags: (result, error, arg) => {
-                if (error === undefined) {
-                    return [{ type: 'Label', id: 'NEW' }]
-                }
-
-                return []
-            }
+            invalidatesTags: (result, error, arg) =>
+                error === undefined ? [{type: 'Label', id: 'NEW'}] : []
         }),
         editLabel: builder.mutation({
             query: (item: Label) => ({
@@ -40,13 +35,16 @@ export const labelApi = createApi({
                 method: 'PUT',
                 data: item
             }),
-            invalidatesTags: (result, error, arg) => {
-                if (error === undefined) {
-                    return [{type: 'Label', id: arg.id}]
-                }
-
-                return []
-            }
+            invalidatesTags: (result, error, arg) =>
+                error === undefined ? [{type: 'Label', id: arg.id}] : []
+        }),
+        deleteLabel: builder.mutation({
+            query: (id: number) => ({
+                url: `/labels/${id}`,
+                method: 'DELETE',
+            }),
+            invalidatesTags: (result, error, arg) =>
+                error === undefined ? [{type: 'Label', id: arg}] : []
         })
     }),
 })
@@ -57,5 +55,6 @@ export const {
     useGetLabelsQuery,
     useGetLabelQuery,
     useAddLabelMutation,
-    useEditLabelMutation
+    useEditLabelMutation,
+    useDeleteLabelMutation,
 } = labelApi
