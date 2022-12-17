@@ -1,34 +1,214 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# INSHOP CRM / ERP / ECOMMERCE
 
-## Getting Started
+Inshop CRM / ERP is powerful framework which allows to build systems for business with different workflows.
+It has on board multi language support, clients management, projects & tasks, documents, simple accounting, inventory management, 
+orders & invoice management, possibilities to integrate with third party software, REST API, and many other features.
 
-First, run the development server:
+https://inshopcrm.com/
 
-```bash
-npm run dev
-# or
-yarn dev
+![alt text](https://inshopcrm.com/static/vuetify/signin.png "Inshop CRM login page")
+
+![alt text](https://inshopcrm.com/static/vuetify/dashboard.png "Inshop CRM login dashboard with charts")
+
+![alt text](https://inshopcrm.com/static/vuetify/calendar.png "Inshop CRM login dashboard with charts")
+
+## Live demo
+Feel free to check out our demo CRM instance
+
+Username: demo
+
+Password: demo
+
+https://demo.inshopcrm.com/signin
+
+
+## Main Features
+
+ * Multi language support
+ * Clients management
+ * Projects
+ * Tasks
+ * Calendar with events & reminders
+ * Documents & templates
+
+## Technologies
+
+### Backend
+ - PHP 8.2
+ - Symfony 6
+ - API Platform
+ - Postgres
+ - Elasticsearch
+ 
+### Admin panel
+ - React, Next.js, Redux, RTK Query, MUI
+ - Docker
+ - GIT
+
+
+# Installation
+
+## Using docker-compose for local testing
+
+.env
+```dotenv
+PORT_API=8888
+PORT_CLIENT=8080
+PORT_ECOMMERCE=8081
+
+DATABASE_NAME=api
+DATABASE_USER=api
+DATABASE_PASSWORD=!ChangeMe!
+
+JWT_PASSPHRASE=!ChangeMe!
+COMPOSE_PROJECT_NAME=inshop-crm
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+docker-compose.yml
 
-You can start editing the page by modifying `pages/dashboard.tsx`. The page auto-updates as you edit the file.
+```
+version: '3.2'
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+services:
+  ecommerce:
+    restart: always
+    image: inshopgroup/inshop-crm-ecommerce
+    user: node
+    working_dir: /var/www
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+    ports:
+      - ${PORT_ECOMMERCE}:3000
+    command: "npm start"
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+  client:
+    restart: always
+    image: inshopgroup/inshop-crm-client
+    user: node
+    working_dir: /var/www
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+    ports:
+      - ${PORT_CLIENT}:80
+    command: "npm start"
 
-## Learn More
+  php:
+    restart: always
+    image: inshopgroup/inshop-crm-api-php-fpm
+    depends_on:
+      - db
+    volumes:
+      - files-data:/var/www/data
+      - images-data:/var/www/public/images
+    networks:
+      - api
 
-To learn more about Next.js, take a look at the following resources:
+  nginx:
+    restart: always
+    image: inshopgroup/inshop-crm-api-nginx
+    depends_on:
+      - php
+    ports:
+      - ${PORT_API}:80
+    volumes:
+      - images-data:/var/www/images
+    networks:
+      - api
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+  db:
+    restart: always
+    image: postgres:9.5-alpine
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
+    networks:
+      - api
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.1
+    environment:
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-data:/usr/share/elasticsearch/data
+    networks:
+      - api
+      - esnet
 
-## Deploy on Vercel
+  redis:
+    image: redis:latest
+    volumes:
+      - redis-data:/var/lib/redis
+    networks:
+      - api
+      
+volumes:
+  es-data: {}
+  db-data: {}
+  files-data: {}
+  images-data: {}
+  redis-data: {}
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+networks:
+    api:
+    esnet:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```
+
+## For developers
+
+```bash
+mkdir inshop-crm
+cd inshop-crm
+
+# api
+git clone git@github.com:inshopgroup/inshop-crm-api.git
+cd inshop-crm-api
+cp .env.dist .env
+docker-compose up -d
+cd ..
+
+# client
+git clone git@github.com:inshopgroup/inshop-crm-client.git
+cd inshop-crm-client
+cp .env.dist .env
+yarn install
+yarn run dev
+cd ..
+
+# ecommerce
+git clone git@github.com:inshopgroup/inshop-crm-ecommerce.git
+cd inshop-crm-ecommerce
+cp .env.dist .env
+yarn install
+yarn run dev
+cd ..
+```
+
+## Setup database & fixtures
+
+```bash
+docker-compose exec --user=www-data php sh ./setup.sh
+```
+
+Enter pass phrase for config/jwt/private.pem: **!ChangeMe!**  
+
+**NOTE!** described setup is only for local use!
+
+Enjoy, after run, API will be available under [http://localhost:8888/docs](http://localhost:8888/docs)
+
+Client - [http://localhost:3000](http://localhost:3000)
+
+```
+username: demo
+password: demo
+```
