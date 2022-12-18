@@ -85,7 +85,7 @@ interface ApiTableProps {
     deleteAction: Function
 }
 
-export default function ApiTable(props: ApiTableProps) {
+export default function BaseTable(props: ApiTableProps) {
     const [order, setOrder] = React.useState<Order>('desc');
     const [orderBy, setOrderBy] = React.useState<string>('id');
     const [page, setPage] = React.useState(0);

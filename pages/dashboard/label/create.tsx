@@ -12,7 +12,7 @@ import {headCells} from "../../../model/Label";
 export default function LabelEdit() {
     const dispatch = useDispatch()
     const router = useRouter()
-    const [addLabel, { isLoading }] = useAddLabelMutation()
+    const [addLabel] = useAddLabelMutation()
 
     const [item, setItem] = useState(new Label());
     const [violations, setViolations] = useState([]);

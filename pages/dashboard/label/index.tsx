@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ApiTable from "../../../components/ApiTable";
+import BaseTable from "../../../components/BaseTable";
 import {useGetLabelsQuery, useDeleteLabelMutation} from "../../../services/rtk/label";
 import {headCells} from "../../../model/Label";
 import PageHeader from "../../../layouts/PageHeader";
@@ -11,18 +11,13 @@ import {useRouter} from "next/router";
 
 export default function LabelIndex() {
     const [deleteLabel] = useDeleteLabelMutation()
-
     const router = useRouter();
-
-    const gotoCreatePage = () => {
-        router.push('/dashboard/label/create')
-    }
 
     const actions = () => {
         return (
             <>
                 <Tooltip title="Create new">
-                    <IconButton onClick={gotoCreatePage}>
+                    <IconButton onClick={() => router.push('/dashboard/label/create')}>
                         <AddCircleIcon sx={{color: 'green'}} />
                     </IconButton>
                 </Tooltip>
@@ -42,12 +37,12 @@ export default function LabelIndex() {
                 actions={actions}
             ></PageHeader>
 
-            <ApiTable
+            <BaseTable
                 route="label"
                 headCells={headCells}
                 loadHandler={useGetLabelsQuery}
                 deleteAction={deleteLabel}
-            ></ApiTable>
+            ></BaseTable>
         </>
     );
 }
