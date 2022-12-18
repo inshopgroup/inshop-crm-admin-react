@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import * as React from "react";
 import {ViolationInterface} from "./forms/FormHelper";
 import {ChangeEvent, FormEvent} from "react";
-import {HeadCell} from "./ApiTable";
+import {HeadCell} from "./BaseTable";
 
 export interface BaseFormProps {
     headCells: readonly HeadCell[];

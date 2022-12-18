@@ -1,4 +1,4 @@
-import {HeadCell} from "../components/ApiTable";
+import {HeadCell} from "../components/BaseTable";
 
 export default class Label {
     id: number | undefined = undefined;

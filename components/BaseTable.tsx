@@ -78,14 +78,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     );
 }
 
-interface ApiTableProps {
+interface BaseTableProps {
     route: string
     headCells: readonly HeadCell[]
     loadHandler: any
     deleteAction: Function
 }
 
-export default function BaseTable(props: ApiTableProps) {
+export default function BaseTable(props: BaseTableProps) {
     const [order, setOrder] = React.useState<Order>('desc');
     const [orderBy, setOrderBy] = React.useState<string>('id');
     const [page, setPage] = React.useState(0);
