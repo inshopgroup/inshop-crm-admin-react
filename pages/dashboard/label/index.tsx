@@ -43,7 +43,7 @@ export default function LabelIndex() {
             ></PageHeader>
 
             <ApiTable
-                route="labels"
+                route="label"
                 headCells={headCells}
                 loadHandler={useGetLabelsQuery}
                 deleteAction={deleteLabel}

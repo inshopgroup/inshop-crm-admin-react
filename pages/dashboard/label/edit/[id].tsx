@@ -6,8 +6,9 @@ import PageHeader from "../../../../layouts/PageHeader";
 import {skipToken} from "@reduxjs/toolkit/query";
 import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
-import LabelForm from "../../../../components/LabelForm";
+import BaseForm from "../../../../components/BaseForm";
 import {proceedResponse} from "../../../../components/forms/FormHelper";
+import {headCells} from "../../../../model/Label";
 
 export default function LabelEdit() {
     const router = useRouter()
@@ -45,12 +46,13 @@ export default function LabelEdit() {
         <>
             <PageHeader title={data.name}></PageHeader>
 
-            <LabelForm
+            <BaseForm
+                headCells={headCells}
                 onSubmit={onSubmit}
                 violations={violations}
                 item={item}
                 onChange={onChange}
-            ></LabelForm>
+            ></BaseForm>
         </>
     );
 }

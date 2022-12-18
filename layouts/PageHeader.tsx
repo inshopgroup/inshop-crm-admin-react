@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 
 interface PageHeaderProps {
     title: string;
-    actions: () => JSX.Element | undefined;
+    actions?: (() => JSX.Element) | undefined;
 }
 
 export default function PageHeader(props: PageHeaderProps) {

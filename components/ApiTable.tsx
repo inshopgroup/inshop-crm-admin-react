@@ -24,6 +24,7 @@ type Order = 'asc' | 'desc';
 export interface HeadCell {
     id: string;
     label: string;
+    type: string
     visibleInList: boolean
     visibleInShow: boolean
     visibleInEdit: boolean
@@ -164,7 +165,7 @@ export default function ApiTable(props: ApiTableProps) {
                                         <TableCell key={row.id + '_actions'} sx={{maxWidth: 100}}>
                                             <Tooltip title="Show item">
                                                 <Link href={{
-                                                    pathname: '/dashboard/label/show/[id]',
+                                                    pathname: `/dashboard/${props.route}/show/[id]`,
                                                     query: { id: row.id }
                                                 }}>
                                                     <IconButton>
@@ -174,7 +175,7 @@ export default function ApiTable(props: ApiTableProps) {
                                             </Tooltip>
                                             <Tooltip title="Edit item">
                                                 <Link href={{
-                                                    pathname: '/dashboard/label/edit/[id]',
+                                                    pathname: `/dashboard/${props.route}/edit/[id]`,
                                                     query: { id: row.id }
                                                 }}>
                                                     <IconButton>

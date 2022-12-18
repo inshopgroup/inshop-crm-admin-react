@@ -12,13 +12,15 @@ export const headCells: readonly HeadCell[] = [
     {
         id: 'id',
         label: 'ID',
+        type: 'number',
         visibleInList: true,
         visibleInShow: true,
-        visibleInEdit: true,
+        visibleInEdit: false,
     },
     {
         id: 'name',
         label: 'Name',
+        type: 'string',
         visibleInList: true,
         visibleInShow: true,
         visibleInEdit: true,
@@ -26,6 +28,7 @@ export const headCells: readonly HeadCell[] = [
     {
         id: 'isActive',
         label: 'Is active',
+        type: 'boolean',
         visibleInList: true,
         visibleInShow: true,
         visibleInEdit: true,
@@ -33,6 +36,7 @@ export const headCells: readonly HeadCell[] = [
     {
         id: 'createdAt',
         label: 'Created at',
+        type: 'datetime',
         visibleInList: true,
         visibleInShow: true,
         visibleInEdit: false,
@@ -40,6 +44,7 @@ export const headCells: readonly HeadCell[] = [
     {
         id: 'updatedAt',
         label: 'Updated at',
+        type: 'datetime',
         visibleInList: false,
         visibleInShow: true,
         visibleInEdit: false,

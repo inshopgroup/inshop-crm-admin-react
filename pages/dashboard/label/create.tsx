@@ -4,9 +4,10 @@ import Label from "../../../model/Label";
 import PageHeader from "../../../layouts/PageHeader";
 import {useState} from "react";
 import {useDispatch} from "react-redux";
-import LabelForm from "../../../components/LabelForm";
+import BaseForm from "../../../components/BaseForm";
 import {proceedResponse} from "../../../components/forms/FormHelper";
 import {useRouter} from "next/router";
+import {headCells} from "../../../model/Label";
 
 export default function LabelEdit() {
     const dispatch = useDispatch()
@@ -38,12 +39,13 @@ export default function LabelEdit() {
         <>
             <PageHeader title="Add new label"></PageHeader>
 
-            <LabelForm
+            <BaseForm
+                headCells={headCells}
                 onSubmit={onSubmit}
                 violations={violations}
                 item={item}
                 onChange={onChange}
-            ></LabelForm>
+            ></BaseForm>
         </>
     );
 }
