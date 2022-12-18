@@ -3,7 +3,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import Footer from "./Footer";
+import PageFooter from "./PageFooter";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import {LinearProgress} from "@mui/material";
@@ -39,7 +39,7 @@ export default function SigninLayout({ children }) {
                     {children}
                 </main>
             </Container>
-            <Footer></Footer>
+            <PageFooter></PageFooter>
         </Box>
     )
 }

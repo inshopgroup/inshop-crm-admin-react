@@ -16,7 +16,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import Button from "@mui/material/Button";
 import {signOut, useSession} from "next-auth/react";
-import Footer from "./Footer";
+import PageFooter from "./PageFooter";
 import {Alert, LinearProgress} from "@mui/material";
 import {selectErrorState, selectLoaderState, setError} from "../store/loaderSlice";
 import {useDispatch, useSelector} from "react-redux";
@@ -122,7 +122,7 @@ export default function DefaultLayout({ children }) {
 
                 {children}
             </Main>
-            <Footer/>
+            <PageFooter/>
             <SnackbarAlert/>
         </Box>
     )

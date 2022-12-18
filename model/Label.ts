@@ -3,7 +3,7 @@ import {HeadCell} from "../components/ApiTable";
 export default class Label {
     id: number | undefined = undefined;
     name: string = '';
-    isActive: boolean = false;
+    isActive: boolean = true;
     createdAt: string | undefined = undefined;
     updatedAt: string | undefined = undefined;
 }

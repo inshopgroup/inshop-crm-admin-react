@@ -16,7 +16,7 @@ function Copyright() {
     );
 }
 
-export default function Footer() {
+export default function PageFooter() {
     return (
         <Box
             component="footer"

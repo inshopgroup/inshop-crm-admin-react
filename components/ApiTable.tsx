@@ -8,13 +8,9 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import TableSortLabel from '@mui/material/TableSortLabel';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -81,40 +77,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     );
 }
 
-interface EnhancedTableToolbarProps {
-    // title: string,
-}
-
-function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    return (
-        <Toolbar
-            sx={{
-                pl: { sm: 2 },
-                pr: { xs: 1, sm: 1 },
-            }}
-        >
-            <Typography
-                sx={{ flex: '1 1 100%' }}
-                variant="h6"
-                id="tableTitle"
-                component="div"
-            >
-                TODO: REMOVE ME
-            </Typography>
-            <Tooltip title="Create new">
-                <IconButton>
-                    <AddCircleIcon sx={{color: 'green'}} />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title="Filter list">
-                <IconButton>
-                    <FilterListIcon />
-                </IconButton>
-            </Tooltip>
-        </Toolbar>
-    );
-}
-
 interface ApiTableProps {
     route: string
     headCells: readonly HeadCell[]
@@ -173,7 +135,6 @@ export default function ApiTable(props: ApiTableProps) {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar />
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
