@@ -160,7 +160,7 @@ export default function DefaultLayout({ children }) {
                                 <ListItemText primary={text} />
                             </ListItemButton>
                         </ListItem>
-                ))}
+                    ))}
                 </List>
             </Drawer>
             <Main>
