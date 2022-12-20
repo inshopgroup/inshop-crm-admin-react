@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useGetLabelQuery, useEditLabelMutation} from "../../../../services/rtk/label";
+import {useGetItemQuery, useEditItemMutation} from "../../../../store/crud";
 import Label from "../../../../model/Label";
 import {useRouter} from "next/router";
 import PageHeader from "../../../../layouts/PageHeader";
@@ -13,13 +13,16 @@ import {headCells} from "../../../../model/Label";
 export default function LabelEdit() {
     const router = useRouter()
     const dispatch = useDispatch()
-    const [editLabel, { isLoading }] = useEditLabelMutation()
+    const [editLabel, { isLoading }] = useEditItemMutation()
 
     const [item, setItem] = useState(new Label());
     const [violations, setViolations] = useState([]);
 
     const { id } = router.query
-    const { data }: { data?: Label } = useGetLabelQuery(id ? parseInt(id.toString()) : skipToken)
+
+    const { data }: { data?: Label | undefined; } = useGetItemQuery(
+        id ? { id: parseInt(id.toString()), '@type': 'Label' } : skipToken
+    )
 
     useEffect(() => {
         if (data) {

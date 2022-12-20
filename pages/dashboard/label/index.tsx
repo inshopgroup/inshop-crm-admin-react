@@ -1,6 +1,6 @@
 import * as React from 'react';
 import BaseTable from "../../../components/BaseTable";
-import {useGetLabelsQuery, useDeleteLabelMutation} from "../../../services/rtk/label";
+import {useGetItemsQuery, useDeleteItemMutation} from "../../../store/crud";
 import {headCells} from "../../../model/Label";
 import PageHeader from "../../../layouts/PageHeader";
 import Tooltip from "@mui/material/Tooltip";
@@ -10,7 +10,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import {useRouter} from "next/router";
 
 export default function LabelIndex() {
-    const [deleteLabel] = useDeleteLabelMutation()
+    const [deleteItem] = useDeleteItemMutation()
     const router = useRouter();
 
     const actions = () => {
@@ -38,10 +38,10 @@ export default function LabelIndex() {
             ></PageHeader>
 
             <BaseTable
-                route="label"
+                model="Label"
                 headCells={headCells}
-                loadHandler={useGetLabelsQuery}
-                deleteAction={deleteLabel}
+                loadHandler={useGetItemsQuery}
+                deleteAction={deleteItem}
             ></BaseTable>
         </>
     );

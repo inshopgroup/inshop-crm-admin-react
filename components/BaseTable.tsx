@@ -18,6 +18,7 @@ import { visuallyHidden } from '@mui/utils';
 import Link from "next/link";
 import {setSnackbar} from "../store/loaderSlice";
 import {useDispatch} from "react-redux";
+import {allowedModels} from "../model/ModelInterface";
 
 type Order = 'asc' | 'desc';
 
@@ -79,7 +80,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 }
 
 interface BaseTableProps {
-    route: string
+    model: typeof allowedModels[number]
     headCells: readonly HeadCell[]
     loadHandler: any
     deleteAction: Function
@@ -94,6 +95,7 @@ export default function BaseTable(props: BaseTableProps) {
     const dispatch = useDispatch();
 
     const { data, error, isLoading } = props.loadHandler({
+        '@type': props.model,
         itemsPerPage: rowsPerPage,
         page: page + 1,
         ['order[' + orderBy + ']']: order,
@@ -104,7 +106,12 @@ export default function BaseTable(props: BaseTableProps) {
 
     const handleDelete = (id: number) => {
         if (confirm('Are you sure?')) {
-            props.deleteAction(id).then((response: any) => {
+            const item = {
+                id,
+                '@type': props.model
+            }
+
+            props.deleteAction(item).then((response: any) => {
                 if (!response.error) {
                     dispatch(setSnackbar({
                         message: 'Successfully deleted',
@@ -132,6 +139,8 @@ export default function BaseTable(props: BaseTableProps) {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
+
+    const route = props.model.toLowerCase()
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -165,7 +174,7 @@ export default function BaseTable(props: BaseTableProps) {
                                         <TableCell key={row.id + '_actions'} sx={{maxWidth: 100}}>
                                             <Tooltip title="Show item">
                                                 <Link href={{
-                                                    pathname: `/dashboard/${props.route}/show/[id]`,
+                                                    pathname: `/dashboard/${route}/show/[id]`,
                                                     query: { id: row.id }
                                                 }}>
                                                     <IconButton>
@@ -175,7 +184,7 @@ export default function BaseTable(props: BaseTableProps) {
                                             </Tooltip>
                                             <Tooltip title="Edit item">
                                                 <Link href={{
-                                                    pathname: `/dashboard/${props.route}/edit/[id]`,
+                                                    pathname: `/dashboard/${route}/edit/[id]`,
                                                     query: { id: row.id }
                                                 }}>
                                                     <IconButton>

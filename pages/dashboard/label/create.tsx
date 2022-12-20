@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useAddLabelMutation} from "../../../services/rtk/label";
+import {useAddItemMutation} from "../../../store/crud";
 import Label from "../../../model/Label";
 import PageHeader from "../../../layouts/PageHeader";
 import {useState} from "react";
@@ -12,7 +12,7 @@ import {headCells} from "../../../model/Label";
 export default function LabelEdit() {
     const dispatch = useDispatch()
     const router = useRouter()
-    const [addLabel] = useAddLabelMutation()
+    const [addItem] = useAddItemMutation()
 
     const [item, setItem] = useState(new Label());
     const [violations, setViolations] = useState([]);
@@ -28,7 +28,7 @@ export default function LabelEdit() {
         e.preventDefault()
         setViolations([])
 
-        addLabel(item)
+        addItem(item)
             .then(response => proceedResponse(response, setViolations, dispatch))
             .then(response => {
                 router.push(`/dashboard/label/show/${response.data.id}`)
