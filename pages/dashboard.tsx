@@ -4,10 +4,13 @@ import Container from '@mui/material/Container';
 import {DataGrid} from '@mui/x-data-grid';
 import axios from "axios";
 import {useEffect, useState} from "react";
-import {Typography} from "@mui/material";
+import {Grid, Input, TextField, Typography} from "@mui/material";
 import ModalWindow from '../src/components/ModalWindow'
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import Backdrop from "@mui/material/Backdrop";
+import Fade from "@mui/material/Fade";
 
 
 function Dashboard() {
@@ -34,9 +37,10 @@ function Dashboard() {
     function getEmptyObj() {
         return {
             id: Date.now(),
-            name: '',
-            prop2: '',
-            prop3: ''
+            title: '',
+            category: '',
+            price: '',
+            description: ''
         };
     }
     function change(prop, event) { // изменение свойства при вводе
@@ -54,11 +58,34 @@ function Dashboard() {
     return(
         <MainLayout>
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                    <Button onClick={handleOpen}>Add Product</Button>
-                <ModalWindow open={open} handleOpen={handleOpen} item={product} change={change} add={add} item={
-                }
+                    <Button sx={{ mb: 2 }} variant="outlined" onClick={handleOpen}>Add Product</Button>
+                <Modal
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    open={open}
+                    onClose={handleOpen}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
                 >
-                </ModalWindow>
+                    <Fade in={open}>
+                        <Box className='modal'>
+                            <form>
+                                <Box sx={{ display:'flex', justifyContent: 'space-between', mb: 3 }}>
+                                        <TextField id="standard-basic" label="Title" variant="standard"  value={product.title} onChange={event => change('title', event)} />
+                                        <TextField id="standard-basic" label="Category" variant="standard" value={product.category} onChange={event => change('category', event)} />
+                                        <TextField id="standard-basic" label="Price" variant="standard" value={product.price} onChange={event => change('price', event)} />
+                                        <TextField id="standard-basic" label="Description"  variant="standard" value={product.description} onChange={event => change('description', event)} />
+                                </Box>
+                                <div className='button'>
+                                    <Button variant="outlined" onClick={add}>Add Product</Button>
+                                </div>
+                            </form>
+                        </Box>
+                    </Fade>
+                </Modal>
                 <div style={{ height: 600, width: '100%' }}>
                     { loading && <Typography variant="h6" align="center">Loading...</Typography> }
                     <DataGrid rows={products} columns={columns} checkboxSelection />

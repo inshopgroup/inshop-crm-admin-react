@@ -35,7 +35,7 @@ export default function ModalWindow(props: any) {
                 }}
             >
                 <Fade in={props.open}>
-                    <Box sx={style}>
+                    <Box className='modal'>
                         <button onClick={props.add}>Добавить объект</button>
                     </Box>
                 </Fade>
