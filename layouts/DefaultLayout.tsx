@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
+import MuiDrawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -21,6 +21,10 @@ import {Alert, LinearProgress} from "@mui/material";
 import {selectErrorState, selectLoaderState, setError} from "../store/loaderSlice";
 import {useDispatch, useSelector} from "react-redux";
 import SnackbarAlert from "./SnackbarAlert";
+import {useState} from "react";
+import IconButton from "@mui/material/IconButton";
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 const drawerWidth = 240;
 
@@ -39,6 +43,33 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     justifyContent: 'flex-end',
 }));
 
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
+        '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            flexShrink: 0,
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+            boxSizing: 'border-box',
+            whiteSpace: 'nowrap',
+            ...(!open && {
+                overflowX: 'hidden',
+                transition: theme.transitions.create('width', {
+                    easing: theme.transitions.easing.sharp,
+                    duration: theme.transitions.duration.leavingScreen,
+                }),
+                width: theme.spacing(7),
+                [theme.breakpoints.up('sm')]: {
+                    width: theme.spacing(9),
+                },
+            }),
+        },
+    }),
+);
+
+
 // @ts-ignore
 export default function DefaultLayout({ children }) {
     const {data: session} = useSession()
@@ -50,6 +81,11 @@ export default function DefaultLayout({ children }) {
        dispatch(setError(null))
     }
 
+    const [open, setOpen] = useState(true);
+    const toggleDrawer = () => {
+        setOpen(!open);
+    };
+
     return (
         <Box
             sx={{
@@ -58,56 +94,74 @@ export default function DefaultLayout({ children }) {
                 minHeight: '100vh',
             }}
         >
-            <MuiAppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-                {showLoader ?
-                    <LinearProgress sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} /> :
-                    ''
-                }
-                <Toolbar>
-                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                        Inshop CRM
-                    </Typography>
-                    <Typography>{session?.user?.name}</Typography>
-                    <Button onClick={() => signOut()} color="inherit">[ Logout ]</Button>
-                </Toolbar>
-            </MuiAppBar>
+            <CssBaseline />
+                <MuiAppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+                    {showLoader ?
+                        <LinearProgress sx={{ zIndex: (theme) => theme.zIndex.drawer + 2 }} /> :
+                        ''
+                    }
+                    <Toolbar>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={toggleDrawer}
+                            sx={{ ...(open && { display: 'none' }) }}
+                        >
+                        <MenuIcon />
+                        </IconButton>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            aria-label="close drawer"
+                            onClick={toggleDrawer}
+                            sx={{ ...(!open && { display: 'none' }) }}>
+                            <ChevronLeftIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                            Inshop CRM
+                        </Typography>
+                        <Typography>{session?.user?.name}</Typography>
+                        <Button onClick={() => signOut()} color="inherit">[ Logout ]</Button>
+                    </Toolbar>
+                </MuiAppBar>
             <CssBaseline />
             <Drawer
                 variant="permanent"
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
-                }}
+                open={open}
             >
-                <Toolbar />
-                <Box sx={{ overflow: 'auto' }}>
-                    <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
+                <Toolbar
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        px: [1],
+                    }}
+                />
+                <Divider />
+                <List component="nav">
+                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                        <ListItem key={text} disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+                        </ListItem>
+                    ))}
                     <Divider />
-                    <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                </Box>
+                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                        <ListItem key={text} disablePadding>
+                            <ListItemButton>
+                                <ListItemIcon>
+                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                </ListItemIcon>
+                                <ListItemText primary={text} />
+                            </ListItemButton>
+                        </ListItem>
+                ))}
+                </List>
             </Drawer>
             <Main>
                 <DrawerHeader />
