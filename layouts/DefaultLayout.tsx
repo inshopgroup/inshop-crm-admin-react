@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
+import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -48,34 +48,26 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
+    shouldForwardProp: (prop) => prop !== 'open',})<AppBarProps>(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
+    background: '#0c5c6f',
 }));
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
         '& .MuiDrawer-paper': {
+            position: 'relative',
+            whiteSpace: 'nowrap',
             width: drawerWidth,
-            flexShrink: 0,
             transition: theme.transitions.create('width', {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.enteringScreen,
             }),
             boxSizing: 'border-box',
-            whiteSpace: 'nowrap',
             ...(!open && {
                 overflowX: 'hidden',
                 transition: theme.transitions.create('width', {
@@ -90,10 +82,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         },
     }),
 );
+interface Content {
+    children: React.ReactNode
+}
+const mdTheme = createTheme();
 
 
 // @ts-ignore
-export default function DefaultLayout({ children }) {
+export default function DefaultLayout({ children }: Content) {
     const {data: session} = useSession()
     const dispatch = useDispatch()
     const showLoader = useSelector(selectLoaderState) !== 0
@@ -103,99 +99,119 @@ export default function DefaultLayout({ children }) {
        dispatch(setError(null))
     }
 
+
     const [open, setOpen] = useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: '100vh',
-            }}
-        >
-            <CssBaseline />
-                <AppBar  position="absolute">
-                    <Toolbar>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={toggleDrawer}
-                            sx={{ ...(open && { display: 'none' }) }}
-                        >
-                        <MenuIcon />
-                        </IconButton>
-                        <IconButton
-                            edge="start"
-                            color="inherit"
-                            aria-label="close drawer"
-                            onClick={toggleDrawer}
-                            sx={{ ...(!open && { display: 'none' }) }}>
-                            <ChevronLeftIcon />
-                        </IconButton>
-                        <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                            Inshop CRM
-                        </Typography>
-                        <Typography>{session?.user?.name}</Typography>
-                        <Button onClick={() => signOut()} color="inherit">[ Logout ]</Button>
-                    </Toolbar>
-                </AppBar>
-            <CssBaseline />
-            <Drawer
-                variant="permanent"
-                open={open}
-            >
-                <Toolbar
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                        px: [1],
-                    }}
-                />
-                <Divider />
-                <List component="nav">
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                    <Divider />
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon>
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText primary={text} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
-                </List>
-            </Drawer>
-            <Main>
-                <DrawerHeader />
-                {error &&
-                    <Alert
-                        variant="filled"
-                        severity="error"
-                        sx={{marginBottom: 3}}
-                        onClose={handleAlertClose}
-                    >{error}</Alert>
-                }
+        <ThemeProvider theme={mdTheme}>
+            <Box
+                sx={{
+                    display: 'flex',
 
-                {children}
-            </Main>
+                }}
+            >
+                <CssBaseline />
+                    <AppBar  position="absolute">
+                        <Toolbar>
+                            <IconButton
+                                edge="start"
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={toggleDrawer}
+                                sx={{ ...(open && { display: 'none' }) }}
+                            >
+                            <MenuIcon />
+                            </IconButton>
+                            <IconButton
+                                edge="start"
+                                color="inherit"
+                                aria-label="close drawer"
+                                onClick={toggleDrawer}
+                                sx={{ ...(!open && { display: 'none' }) }}>
+                                <ChevronLeftIcon />
+                            </IconButton>
+                            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                                Inshop CRM
+                            </Typography>
+                            <Typography>{session?.user?.name}</Typography>
+                            <Button onClick={() => signOut()} color="inherit">[ Logout ]</Button>
+                        </Toolbar>
+                    </AppBar>
+                <CssBaseline />
+                <Drawer
+                    variant="permanent"
+                    open={open}
+                >
+                    <Toolbar
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-end',
+                            px: [1],
+                        }}
+                    />
+                    <Divider />
+                    <List component="nav">
+                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+                            <ListItem key={text} disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                        <Divider />
+                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+                            <ListItem key={text} disablePadding>
+                                <ListItemButton>
+                                    <ListItemIcon>
+                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                                    </ListItemIcon>
+                                    <ListItemText primary={text} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Drawer>
+                {/*<Main>*/}
+                {/*    <DrawerHeader />*/}
+                {/*    {error &&*/}
+                {/*        <Alert*/}
+                {/*            variant="filled"*/}
+                {/*            severity="error"*/}
+                {/*            sx={{marginBottom: 3}}*/}
+                {/*            onClose={handleAlertClose}*/}
+                {/*        >{error}</Alert>*/}
+                {/*    }*/}
+
+                {/*    {children}*/}
+                {/*</Main>*/}
+                <Box
+                    component="main"
+                    sx={{
+                        backgroundColor: (theme) =>
+                            theme.palette.mode === 'light'
+                                ? theme.palette.grey[100]
+                                : theme.palette.grey[900],
+                        flexGrow: 1,
+                        height: '100vh',
+                        overflow: 'auto',
+                        position: 'relative'
+                    }}
+                >
+                    <Toolbar />
+                    <main>
+                        { children }
+                    </main>
+                </Box>
+            </Box>
             <PageFooter/>
             <SnackbarAlert/>
-        </Box>
+        </ThemeProvider>
     )
 }
