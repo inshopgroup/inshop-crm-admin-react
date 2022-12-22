@@ -205,6 +205,15 @@ export default function DefaultLayout({ children }: Content) {
                     }}
                 >
                     <Toolbar />
+                    <DrawerHeader />
+                    {error &&
+                    <Alert
+                        variant="filled"
+                        severity="error"
+                        sx={{marginBottom: 3}}
+                        onClose={handleAlertClose}
+                    >{error}</Alert>
+                    }
                     <main>
                         { children }
                     </main>
