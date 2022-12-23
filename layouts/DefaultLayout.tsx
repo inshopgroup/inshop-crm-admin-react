@@ -28,12 +28,6 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
 const drawerWidth = 240;
 
-const Main = styled('main')(({ theme }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    marginLeft: `${drawerWidth}px`,
-}));
-
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -85,7 +79,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 interface Content {
     children: React.ReactNode
 }
-const mdTheme = createTheme();
 
 
 // @ts-ignore
@@ -106,7 +99,7 @@ export default function DefaultLayout({ children }: Content) {
     };
 
     return (
-        <ThemeProvider theme={mdTheme}>
+        <div>
             <Box
                 sx={{
                     display: 'flex',
@@ -178,19 +171,6 @@ export default function DefaultLayout({ children }: Content) {
                         ))}
                     </List>
                 </Drawer>
-                {/*<Main>*/}
-                {/*    <DrawerHeader />*/}
-                {/*    {error &&*/}
-                {/*        <Alert*/}
-                {/*            variant="filled"*/}
-                {/*            severity="error"*/}
-                {/*            sx={{marginBottom: 3}}*/}
-                {/*            onClose={handleAlertClose}*/}
-                {/*        >{error}</Alert>*/}
-                {/*    }*/}
-
-                {/*    {children}*/}
-                {/*</Main>*/}
                 <Box
                     component="main"
                     sx={{
@@ -221,6 +201,6 @@ export default function DefaultLayout({ children }: Content) {
             </Box>
             <PageFooter/>
             <SnackbarAlert/>
-        </ThemeProvider>
+        </div>
     )
 }
