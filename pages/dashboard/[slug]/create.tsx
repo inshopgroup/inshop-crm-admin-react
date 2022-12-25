@@ -7,7 +7,7 @@ import BaseForm from "../../../components/BaseForm";
 import {proceedResponse} from "../../../components/forms/FormHelper";
 import {useRouter} from "next/router";
 import {HeadCell} from "../../../components/BaseTable";
-import {geModelByRoute} from "../../../model/ModelInterface";
+import {geModelByRoute, ModelInterface} from "../../../model/ModelInterface";
 
 export default function ItemEdit() {
     const dispatch = useDispatch()
@@ -16,7 +16,7 @@ export default function ItemEdit() {
 
     const [addItem] = useAddItemMutation()
 
-    const [item, setItem] = useState();
+    const [item, setItem] = useState<ModelInterface | null>(null);
     const [violations, setViolations] = useState([]);
     const [headCells, setHeadCells] = useState<readonly HeadCell[] | null>(null);
 
@@ -32,21 +32,25 @@ export default function ItemEdit() {
     }
 
     const onChange = (e: any) => {
-        setItem({
-            ...item,
-            [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
-        });
+        if (item) {
+            setItem({
+                ...item,
+                [e.target.name]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
+            });
+        }
     }
 
     const onSubmit = (e: any) => {
-        e.preventDefault()
-        setViolations([])
+        if (item) {
+            e.preventDefault()
+            setViolations([])
 
-        addItem(item)
-            .then(response => proceedResponse(response, setViolations, dispatch))
-            .then(response => {
-                router.push(`/dashboard/${slug}/show/${response.data.id}`)
-            })
+            addItem(item)
+                .then(response => proceedResponse(response, setViolations, dispatch))
+                .then(response => {
+                    router.push(`/dashboard/${slug}/show/${response.data.id}`)
+                })
+        }
     }
 
     return (

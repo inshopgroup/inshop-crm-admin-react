@@ -1,19 +1,22 @@
 import pluralize from 'pluralize'
 import {snakeCase, pascalCase} from 'change-case'
+import Label from "./Label";
 
-export const allowedModels = [
-    'Label',
-];
+export const allowedModels = {
+    Label,
+};
 
-export const getRouteByModel = (model: typeof allowedModels[number]): string => {
+const allowedModelsKeys = Object.keys(allowedModels)
+
+export const getRouteByModel = (model: typeof allowedModelsKeys[number]): string => {
     return pluralize(snakeCase(model))
 }
 
-export const geModelByRoute = (route: string): typeof allowedModels[number] => {
+export const geModelByRoute = (route: string): typeof allowedModelsKeys[number] => {
     return pluralize.singular(pascalCase(route))
 }
 
 export interface ModelInterface {
     id: number | undefined;
-    '@type': typeof allowedModels[number];
+    '@type': typeof allowedModelsKeys[number];
 }

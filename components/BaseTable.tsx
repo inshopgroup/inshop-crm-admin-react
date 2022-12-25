@@ -79,8 +79,10 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     );
 }
 
+const allowedModelsKeys = Object.keys(allowedModels)
+
 interface BaseTableProps {
-    model: typeof allowedModels[number]
+    model: typeof allowedModelsKeys[number]
     headCells: readonly HeadCell[]
     loadHandler: any
     deleteAction: Function

@@ -3,12 +3,14 @@ import { axiosBaseQuery } from '../src/axios'
 import {allowedModels, getRouteByModel, ModelInterface} from "../model/ModelInterface";
 import {ListParamsInterface} from "../model/ListParamsInterface";
 
+const allowedModelsKeys = Object.keys(allowedModels)
+
 export const crudApi = createApi({
     reducerPath: 'crudApi',
     baseQuery: axiosBaseQuery({
         baseUrl: 'http://localhost:8888',
     }),
-    tagTypes: allowedModels,
+    tagTypes: allowedModelsKeys,
     endpoints: (builder) => ({
         getItems: builder.query({
             query: (params: ListParamsInterface) => ({

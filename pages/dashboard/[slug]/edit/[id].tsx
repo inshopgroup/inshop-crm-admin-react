@@ -1,6 +1,5 @@
 import * as React from 'react';
 import {useGetItemQuery, useEditItemMutation} from "../../../../store/crud";
-import Label from "../../../../model/Label";
 import {useRouter} from "next/router";
 import PageHeader from "../../../../layouts/PageHeader";
 import {skipToken} from "@reduxjs/toolkit/query";
@@ -9,7 +8,7 @@ import {useDispatch} from "react-redux";
 import BaseForm from "../../../../components/BaseForm";
 import {proceedResponse} from "../../../../components/forms/FormHelper";
 import {HeadCell} from "../../../../components/BaseTable";
-import {geModelByRoute} from "../../../../model/ModelInterface";
+import {geModelByRoute, ModelInterface} from "../../../../model/ModelInterface";
 
 export default function ItemEdit() {
     const router = useRouter()
@@ -33,15 +32,13 @@ export default function ItemEdit() {
 
     const [violations, setViolations] = useState([]);
 
-    const { data }: { data?: Label | undefined; } = useGetItemQuery(
+    const { data }: { data?: ModelInterface | undefined; } = useGetItemQuery(
         id && model ? { id: parseInt(id.toString()), '@type': model } : skipToken
     )
 
-    useEffect(() => {
-        if (data) {
-            setItem(data)
-        }
-    }, [data])
+    if (data) {
+        setItem(data)
+    }
 
     const onChange = (e: any) => {
         setItem({
