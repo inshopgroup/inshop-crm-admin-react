@@ -16,10 +16,20 @@ export const crudApi = createApi({
                 method: 'get',
                 params
             }),
-            providesTags: (result = [], error, arg) => [
-                { type: arg['@type'], id: 'NEW' },
-                ...result['hydra:member'].map(({ id } : { id: number }) => ({ type: arg['@type'], id }))
-            ]
+            providesTags: (result = [], error, arg) => {
+                const tags = [
+                    { type: arg['@type'], id: 'NEW' }
+                ]
+
+                if (result && result['hydra:member']) {
+                    return Object.assign(
+                        tags,
+                        result['hydra:member'].map(({ id } : { id: number }) => ({ type: arg['@type'], id }))
+                    )
+                }
+
+                return tags
+            }
         }),
         getItem: builder.query({
             query: (item: ModelInterface) => ({

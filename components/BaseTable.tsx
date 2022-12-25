@@ -18,7 +18,7 @@ import { visuallyHidden } from '@mui/utils';
 import Link from "next/link";
 import {setSnackbar} from "../store/loaderSlice";
 import {useDispatch} from "react-redux";
-import {allowedModels} from "../model/ModelInterface";
+import {allowedModels, getRouteByModel} from "../model/ModelInterface";
 
 type Order = 'asc' | 'desc';
 
@@ -140,7 +140,7 @@ export default function BaseTable(props: BaseTableProps) {
         setPage(0);
     };
 
-    const route = props.model.toLowerCase()
+    const route = getRouteByModel(props.model)
 
     return (
         <Box sx={{ width: '100%' }}>

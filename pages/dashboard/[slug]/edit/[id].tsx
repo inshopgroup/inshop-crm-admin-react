@@ -8,25 +8,38 @@ import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import BaseForm from "../../../../components/BaseForm";
 import {proceedResponse} from "../../../../components/forms/FormHelper";
-import {headCells} from "../../../../model/Label";
+import {HeadCell} from "../../../../components/BaseTable";
+import {geModelByRoute} from "../../../../model/ModelInterface";
 
-export default function LabelEdit() {
+export default function ItemEdit() {
     const router = useRouter()
-    const dispatch = useDispatch()
-    const [editLabel, { isLoading }] = useEditItemMutation()
+    const { slug, id } = router.query
 
-    const [item, setItem] = useState(new Label());
+    const dispatch = useDispatch()
+    const [editItem, { isLoading }] = useEditItemMutation()
+
+    const [headCells, setHeadCells] = useState<readonly HeadCell[] | null>(null);
+    const [item, setItem] = useState();
+
+    let model: string | null = null;
+
+    if (slug && !item) {
+        model = geModelByRoute(slug.toString())
+
+        import(`../../../../model/${model}`).then((modelImported) => {
+            setHeadCells(modelImported.headCells)
+        });
+    }
+
     const [violations, setViolations] = useState([]);
 
-    const { id } = router.query
-
     const { data }: { data?: Label | undefined; } = useGetItemQuery(
-        id ? { id: parseInt(id.toString()), '@type': 'Label' } : skipToken
+        id && model ? { id: parseInt(id.toString()), '@type': model } : skipToken
     )
 
     useEffect(() => {
         if (data) {
-            setItem({ ...data })
+            setItem(data)
         }
     }, [data])
 
@@ -41,13 +54,13 @@ export default function LabelEdit() {
         e.preventDefault()
         setViolations([])
 
-        editLabel(item).then(response => proceedResponse(response, setViolations, dispatch))
+        editItem(item).then(response => proceedResponse(response, setViolations, dispatch))
     }
 
     return (
-        data &&
+        item && headCells &&
         <>
-            <PageHeader title={data.name}></PageHeader>
+            <PageHeader title={item.name}></PageHeader>
 
             <BaseForm
                 headCells={headCells}
