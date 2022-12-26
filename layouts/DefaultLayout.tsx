@@ -25,6 +25,7 @@ import {useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import {ListItems} from "./ListItems"
 
 const drawerWidth = 240;
 
@@ -147,29 +148,30 @@ export default function DefaultLayout({ children }: Content) {
                         }}
                     />
                     <Divider />
-                    <List component="nav">
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                        <Divider />
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
+                    {/*<List component="nav">*/}
+                    {/*    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
+                    {/*        <ListItem key={text} disablePadding>*/}
+                    {/*            <ListItemButton>*/}
+                    {/*                <ListItemIcon>*/}
+                    {/*                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}*/}
+                    {/*                </ListItemIcon>*/}
+                    {/*                <ListItemText primary={text} />*/}
+                    {/*            </ListItemButton>*/}
+                    {/*        </ListItem>*/}
+                    {/*    ))}*/}
+                    {/*    <Divider />*/}
+                    {/*    {['All mail', 'Trash', 'Spam'].map((text, index) => (*/}
+                    {/*        <ListItem key={text} disablePadding>*/}
+                    {/*            <ListItemButton>*/}
+                    {/*                <ListItemIcon>*/}
+                    {/*                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}*/}
+                    {/*                </ListItemIcon>*/}
+                    {/*                <ListItemText primary={text} />*/}
+                    {/*            </ListItemButton>*/}
+                    {/*        </ListItem>*/}
+                    {/*    ))}*/}
+                    {/*</List>*/}
+                    <ListItems></ListItems>
                 </Drawer>
                 <Box
                     component="main"

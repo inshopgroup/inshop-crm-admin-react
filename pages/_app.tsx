@@ -12,6 +12,7 @@ import type { NextPage } from 'next'
 import { wrapper } from "../store/store";
 import { Provider } from 'react-redux';
 import { initAxios } from '../src/axios';
+import '../styles/global.css'
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();

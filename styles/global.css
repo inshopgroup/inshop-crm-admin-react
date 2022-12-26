@@ -1,0 +1,12 @@
+.navigation-link {
+    color: #666666;
+    text-decoration: none;
+}
+.navigation-link.active span {
+    color: #0c5c6f;
+    font-weight: bold;
+}
+
+.navigation-link.active svg {
+    color: #0c5c6f;
+}
