@@ -148,29 +148,6 @@ export default function DefaultLayout({ children }: Content) {
                         }}
                     />
                     <Divider />
-                    {/*<List component="nav">*/}
-                    {/*    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
-                    {/*        <ListItem key={text} disablePadding>*/}
-                    {/*            <ListItemButton>*/}
-                    {/*                <ListItemIcon>*/}
-                    {/*                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}*/}
-                    {/*                </ListItemIcon>*/}
-                    {/*                <ListItemText primary={text} />*/}
-                    {/*            </ListItemButton>*/}
-                    {/*        </ListItem>*/}
-                    {/*    ))}*/}
-                    {/*    <Divider />*/}
-                    {/*    {['All mail', 'Trash', 'Spam'].map((text, index) => (*/}
-                    {/*        <ListItem key={text} disablePadding>*/}
-                    {/*            <ListItemButton>*/}
-                    {/*                <ListItemIcon>*/}
-                    {/*                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}*/}
-                    {/*                </ListItemIcon>*/}
-                    {/*                <ListItemText primary={text} />*/}
-                    {/*            </ListItemButton>*/}
-                    {/*        </ListItem>*/}
-                    {/*    ))}*/}
-                    {/*</List>*/}
                     <ListItems></ListItems>
                 </Drawer>
                 <Box

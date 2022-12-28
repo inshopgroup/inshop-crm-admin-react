@@ -17,6 +17,7 @@ import Divider from "@mui/material/Divider";
 export function ListItems() {
 
     const router = useRouter();
+    const roles = ['ROLE_CLIENT', 'ROLE_ADMIN']
 
     return(
         <nav className={'navigation'}>
@@ -31,17 +32,19 @@ export function ListItems() {
                     <ListItemText primary="Dashboard" />
                 </ListItemButton>
             </Link>
-            <Link
-                href={'/calendar'}
-                className={ router.pathname == "/calendar" ? "navigation-link active" : "navigation-link"}
-            >
-                <ListItemButton>
-                    <ListItemIcon>
-                        <CalendarMonthIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Calendar"/>
-                </ListItemButton>
-            </Link>
+            { roles.includes('ROLE_TEACHER') &&
+                <Link
+                    href={'/calendar'}
+                    className={ router.pathname == "/calendar" ? "navigation-link active" : "navigation-link"}
+                >
+                    <ListItemButton>
+                        <ListItemIcon>
+                            <CalendarMonthIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Calendar"/>
+                    </ListItemButton>
+                </Link>
+            }
             <Link href={'/clients'} className={'navigation-link'}>
                 <ListItemButton>
                     <ListItemIcon>
