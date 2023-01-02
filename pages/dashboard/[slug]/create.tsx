@@ -20,12 +20,10 @@ export default function ItemEdit() {
     const [violations, setViolations] = useState([]);
     const [headCells, setHeadCells] = useState<readonly HeadCell[] | null>(null);
 
-    let model: string | null = null;
+    if (slug && headCells === null) {
+        const _model = geModelByRoute(slug.toString())
 
-    if (slug && !item) {
-        model = geModelByRoute(slug.toString())
-
-        import(`../../../model/${model}`).then((modelImported) => {
+        import(`../../../model/${_model}`).then((modelImported) => {
             setItem(new modelImported.default)
             setHeadCells(modelImported.headCells)
         });
@@ -55,18 +53,17 @@ export default function ItemEdit() {
 
     return (
         <>
-            {item &&
+            {item && headCells &&
                 <>
                     <PageHeader title={`Add new ${item['@type']}`}></PageHeader>
 
-                    {headCells && <BaseForm
+                    <BaseForm
                         headCells={headCells}
                         onSubmit={onSubmit}
                         violations={violations}
                         item={item}
                         onChange={onChange}
-                    ></BaseForm
-                    >}
+                    ></BaseForm>
                 </>
             }
         </>

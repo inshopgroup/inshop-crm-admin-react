@@ -24,9 +24,8 @@ export const crudApi = createApi({
                 ]
 
                 if (result && result['hydra:member']) {
-                    return Object.assign(
-                        tags,
-                        result['hydra:member'].map(({ id } : { id: number }) => ({ type: arg['@type'], id }))
+                    tags.push(
+                        ...result['hydra:member'].map(({ id } : { id: number }) => ({ type: arg['@type'], id }))
                     )
                 }
 

@@ -19,14 +19,14 @@ export default function ItemEdit() {
 
     const [headCells, setHeadCells] = useState<readonly HeadCell[] | null>(null);
     const [item, setItem] = useState();
+    const [model, setModel] = useState<string | null>(null);
 
-    let model: string | null = null;
+    if (slug && headCells === null) {
+        const _model = geModelByRoute(slug.toString())
 
-    if (slug && !item) {
-        model = geModelByRoute(slug.toString())
-
-        import(`../../../../model/${model}`).then((modelImported) => {
+        import(`../../../../model/${_model}`).then((modelImported) => {
             setHeadCells(modelImported.headCells)
+            setModel(_model)
         });
     }
 
@@ -36,9 +36,11 @@ export default function ItemEdit() {
         id && model ? { id: parseInt(id.toString()), '@type': model } : skipToken
     )
 
-    if (data) {
-        setItem(data)
-    }
+    useEffect(() => {
+        if (data) {
+            setItem(data)
+        }
+    }, [data])
 
     const onChange = (e: any) => {
         setItem({

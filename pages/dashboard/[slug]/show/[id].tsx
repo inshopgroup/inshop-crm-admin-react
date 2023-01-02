@@ -13,14 +13,14 @@ export default function ItemShow() {
     const { slug, id } = router.query
 
     const [headCells, setHeadCells] = useState<readonly HeadCell[] | null>(null);
+    const [model, setModel] = useState<string | null>(null);
 
-    let model: string | null = null;
+    if (slug && headCells === null) {
+        const _model = geModelByRoute(slug.toString())
 
-    if (slug && !model) {
-        model = geModelByRoute(slug.toString())
-
-        import(`../../../../model/${model}`).then((modelImported) => {
+        import(`../../../../model/${_model}`).then((modelImported) => {
             setHeadCells(modelImported.headCells)
+            setModel(_model)
         });
     }
 
