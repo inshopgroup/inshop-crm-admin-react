@@ -1,7 +1,9 @@
 import {HeadCell} from "../components/BaseTable";
+import {ModelInterface} from "./ModelInterface";
 
-export default class Label {
+export default class Label implements ModelInterface{
     id: number | undefined = undefined;
+    '@type': string = 'Label';
     name: string = '';
     isActive: boolean = true;
     createdAt: string | undefined = undefined;
