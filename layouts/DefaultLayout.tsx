@@ -26,6 +26,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import {ListItems} from "./ListItems"
+import Container from "@mui/material/Container";
 
 const drawerWidth = 240;
 
@@ -174,7 +175,27 @@ export default function DefaultLayout({ children }: Content) {
                     >{error}</Alert>
                     }
                     <main>
-                        { children }
+                        <Container maxWidth="lg"
+                                   sx={{
+                                       display:'flex',
+                                       justifyContent:"center",
+                                       flexDirection:"column",
+                                       alignItems: "center",
+                                       mt: 4,
+                                       mb: 4
+                                   }}
+                        >
+                            <Box
+                                sx={{
+                                    display:'flex',
+                                    justifyContent:"center",
+                                    flexDirection:"column",
+                                    alignItems: "center"
+                                }}
+                            >
+                                { children }
+                            </Box>
+                        </Container>
                     </main>
                 </Box>
             </Box>
