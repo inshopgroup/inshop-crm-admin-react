@@ -53,7 +53,11 @@ export default function ItemEdit() {
         e.preventDefault()
         setViolations([])
 
-        editItem(item).then(response => proceedResponse(response, setViolations, dispatch))
+        editItem(item)
+            .then(response => proceedResponse(response, setViolations, dispatch))
+            .then(response => {
+                router.push(`/dashboard/${slug}/show/${response.data.id}`)
+            })
     }
 
     return (
