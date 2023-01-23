@@ -22,8 +22,8 @@ export function ListItems() {
     return(
         <nav className={'navigation'}>
             <Link
-                href={'/'}
-                className={ router.pathname == "/" ? "navigation-link active" : "navigation-link"}
+                href={'/dashboard'}
+                className={ router.pathname == "/dashboard" ? "navigation-link active" : "navigation-link"}
             >
                 <ListItemButton>
                     <ListItemIcon>
