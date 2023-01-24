@@ -10,3 +10,15 @@
 .navigation-link.active svg {
     color: #0c5c6f;
 }
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    background-color: #e7e7e7;
+    border: 2px solid #848484;
+    border-radius: 15px ;
+    box-shadow: #666666;
+    padding: 8px
+}
