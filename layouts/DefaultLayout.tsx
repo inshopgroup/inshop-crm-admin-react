@@ -14,6 +14,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import LabelIcon from '@mui/icons-material/Label';
+import FlagIcon from '@mui/icons-material/Flag';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import Button from "@mui/material/Button";
 import {signOut, useSession} from "next-auth/react";
 import PageFooter from "./PageFooter";
@@ -21,6 +26,9 @@ import {Alert, LinearProgress} from "@mui/material";
 import {selectErrorState, selectLoaderState, setError} from "../store/loaderSlice";
 import {useDispatch, useSelector} from "react-redux";
 import SnackbarAlert from "./SnackbarAlert";
+import Collapse from '@mui/material/Collapse';
+
+import type { IMenuItem } from '../model/IMenuItem'
 
 const drawerWidth = 240;
 
@@ -45,10 +53,20 @@ export default function DefaultLayout({ children }) {
     const dispatch = useDispatch()
     const showLoader = useSelector(selectLoaderState) !== 0
     const error = useSelector(selectErrorState)
+    const [open, setOpen] = React.useState<boolean>(true);
 
-    const handleAlertClose = () => {
+    const handleClick = (): void => {
+        setOpen(!open);
+    };
+
+    const handleAlertClose = (): void => {
        dispatch(setError(null))
     }
+
+    const menuItems: Array<IMenuItem> = [
+        { label: 'Labels', icon: LabelIcon, route: 'label', role: 'ROLE_LABEL_LIST' },
+        { label: 'Countries', icon: FlagIcon, route: 'country', role: 'ROLE_COUNTRY_LIST' },
+    ]
 
     return (
         <Box
@@ -83,14 +101,25 @@ export default function DefaultLayout({ children }) {
                 <Toolbar />
                 <Box sx={{ overflow: 'auto' }}>
                     <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
+                        <ListItemButton onClick={handleClick}>
+                            <ListItemIcon>
+                                <FormatListBulletedIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Dictionaries" />
+                            {open ? <ExpandLess /> : <ExpandMore />}
+                        </ListItemButton>
+                        {menuItems.map((item) => (
+                            <ListItem key={item.label} disablePadding>
+                                <Collapse in={open} timeout="auto" unmountOnExit>
+                                    <List component="div" disablePadding>
+                                        <ListItemButton href={`/dashboard/${item.route}`} sx={{ pl: 4 }}>
+                                            <ListItemIcon>
+                                                <item.icon />
+                                            </ListItemIcon>
+                                            <ListItemText primary={item.label} />
+                                        </ListItemButton>
+                                    </List>
+                                </Collapse>
                             </ListItem>
                         ))}
                     </List>
