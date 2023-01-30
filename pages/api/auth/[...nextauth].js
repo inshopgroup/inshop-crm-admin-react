@@ -4,8 +4,8 @@ import axios from '../../../src/axios';
 
 export default NextAuth({
     pages: {
-        signIn: "/signin",
-        error: "/signin",
+        signIn: "/",
+        error: "/",
     },
     providers: [
         CredentialsProvider({
