@@ -19,9 +19,8 @@ export default function DashboardMenuItem(props: DashboardMenuItemProps) {
   const { item, hasChildren = false, pl = 2, open, onClick } = props
 
   function clickHandler(event: React.MouseEvent<HTMLElement>): void {
-    event.preventDefault()
-
     if (hasChildren && onClick) {
+      event.preventDefault()
       onClick(!open)
     }
   }
