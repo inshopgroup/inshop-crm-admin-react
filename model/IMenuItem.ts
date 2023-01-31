@@ -1,9 +1,15 @@
 import { SvgIconComponent } from '@mui/icons-material'
 
-export interface IMenuItem {
+interface IMenuItem {
   name: string
   icon: SvgIconComponent
-  route?: string
   role: string
-  children?: Array<IMenuItem>
+}
+
+export interface IMenuItemSimple extends IMenuItem {
+  route: string
+}
+
+export interface IMenuItemExpanded extends IMenuItem {
+  children: IMenuItemSimple[]
 }

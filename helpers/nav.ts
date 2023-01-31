@@ -15,9 +15,9 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import LabelIcon from '@mui/icons-material/Label'
 import SecurityIcon from '@mui/icons-material/Security'
 
-import type { IMenuItem } from '../model/IMenuItem'
+import type { IMenuItemExpanded, IMenuItemSimple } from '../model/IMenuItem'
 
-export const menu: Array<IMenuItem> = [
+export const menu: Array<IMenuItemSimple | IMenuItemExpanded> = [
     {
         name: 'Dashboard',
         icon: DashboardIcon,
