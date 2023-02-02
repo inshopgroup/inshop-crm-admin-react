@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useRouter } from 'next/router'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
@@ -8,28 +9,52 @@ import ExpandMore from '@mui/icons-material/ExpandMore'
 import type { IMenuItemExpanded, IMenuItemSimple } from '../model/IMenuItem'
 
 interface DashboardMenuItemProps {
-  item: IMenuItemSimple | IMenuItemExpanded,
-  hasChildren?: boolean
-  pl?: number,
-  open?: boolean,
-  onClick?: React.Dispatch<React.SetStateAction<boolean>>
+  item: IMenuItemSimple | IMenuItemExpanded
+  hasChildren?: boolean | undefined
+  pl?: number | undefined
+  open?: boolean | undefined
+  selected?: boolean | undefined
+  onClick?: React.Dispatch<React.SetStateAction<boolean>> | undefined
+  setSelected?: React.Dispatch<React.SetStateAction<boolean>> | undefined
 }
 
 export default function DashboardMenuItem(props: DashboardMenuItemProps) {
-  const { item, hasChildren = false, pl = 2, open, onClick } = props
+  const router = useRouter()
+  const currentUrl = router.asPath
+  const {
+    item,
+    hasChildren = false,
+    pl = 2,
+    open,
+    onClick,
+    setSelected,
+    selected: selectedFromParent = false
+  } = props
+  const route = 'route' in item ? item.route : ''
+  const selected =
+      currentUrl === route ||
+      !!route && route !== '/dashboard' && currentUrl.includes(route)
+
+  if (selected && hasChildren && setSelected) {
+    setSelected(true)
+  }
 
   function clickHandler(event: React.MouseEvent<HTMLElement>): void {
+    event.preventDefault()
+
     if (hasChildren && onClick) {
-      event.preventDefault()
       onClick(!open)
+    } else {
+      router.push(route)
     }
   }
 
   return (
       <ListItemButton
-          href={'route' in item ? item.route : ''}
+          href={route}
           sx={{ pl }}
           onClick={clickHandler}
+          selected={selected || selectedFromParent}
       >
         <ListItemIcon sx={{ minWidth: '32px' }}>
           <props.item.icon sx={{ fontSize: 'medium' }} />

@@ -12,16 +12,28 @@ interface DashboardMenuExpandedItemProps {
 export default function DashboardMenuExpandedItem(props: DashboardMenuExpandedItemProps) {
   const { item } = props
   const [open, setOpen] = React.useState<boolean>(false)
+  const [selected, setSelected] = React.useState<boolean>(false)
   const hasChildren = item.children?.length > 0
 
   return hasChildren ? (
       <>
-        <DashboardMenuItem item={item} hasChildren={hasChildren} open={open} onClick={setOpen} />
+        <DashboardMenuItem
+            item={item}
+            hasChildren={hasChildren}
+            open={open}
+            onClick={setOpen}
+            selected={selected && !open}
+        />
 
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {item.children.map((child, index) => (
-                <DashboardMenuItem item={child} pl={4} key={index} />
+                <DashboardMenuItem
+                    item={child}
+                    pl={4}
+                    key={index}
+                    setSelected={setSelected}
+                />
             ))}
           </List>
         </Collapse>
