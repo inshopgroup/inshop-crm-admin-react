@@ -22,7 +22,7 @@ export const menu: Array<IMenuItemSimple | IMenuItemExpanded> = [
         name: 'Dashboard',
         icon: DashboardIcon,
         role: '',
-        route: '/dashboard/',
+        route: '/dashboard',
     },
     {
         name: 'Calendar',
