@@ -1,4 +1,4 @@
-import * as React from 'react'
+import { Dispatch, SetStateAction, MouseEvent } from 'react'
 import { useRouter } from 'next/router'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
@@ -14,8 +14,7 @@ interface DashboardMenuItemProps {
   pl?: number | undefined
   open?: boolean | undefined
   selected?: boolean | undefined
-  onClick?: React.Dispatch<React.SetStateAction<boolean>> | undefined
-  setSelected?: React.Dispatch<React.SetStateAction<boolean>> | undefined
+  onClick?: Dispatch<SetStateAction<boolean>> | undefined
 }
 
 export default function DashboardMenuItem(props: DashboardMenuItemProps) {
@@ -27,7 +26,6 @@ export default function DashboardMenuItem(props: DashboardMenuItemProps) {
     pl = 2,
     open,
     onClick,
-    setSelected,
     selected: selectedFromParent = false
   } = props
   const route = 'route' in item ? item.route : ''
@@ -35,11 +33,7 @@ export default function DashboardMenuItem(props: DashboardMenuItemProps) {
       currentUrl === route ||
       !!route && route !== '/dashboard' && currentUrl.includes(route)
 
-  if (selected && hasChildren && setSelected) {
-    setSelected(true)
-  }
-
-  function clickHandler(event: React.MouseEvent<HTMLElement>): void {
+  function clickHandler(event: MouseEvent<HTMLElement>): void {
     event.preventDefault()
 
     if (hasChildren && onClick) {
