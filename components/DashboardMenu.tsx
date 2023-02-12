@@ -1,4 +1,3 @@
-import * as React from 'react'
 import List from '@mui/material/List'
 import DashboardMenuItem from './DashboardMenuItem'
 import DashboardMenuExpandedItem from './DashboardMenuIExpandedtem'

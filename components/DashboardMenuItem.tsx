@@ -1,20 +1,18 @@
-import { Dispatch, SetStateAction, MouseEvent } from 'react'
+import { ReactNode, MouseEvent } from 'react'
 import { useRouter } from 'next/router'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import ExpandLess from '@mui/icons-material/ExpandLess'
-import ExpandMore from '@mui/icons-material/ExpandMore'
 
 import type { IMenuItemExpanded, IMenuItemSimple } from '../model/IMenuItem'
 
 interface DashboardMenuItemProps {
   item: IMenuItemSimple | IMenuItemExpanded
-  hasChildren?: boolean | undefined
+  hasSubmenu?: boolean | undefined
+  children?: ReactNode | null
   pl?: number | undefined
-  open?: boolean | undefined
   selected?: boolean | undefined
-  onClick?: Dispatch<SetStateAction<boolean>> | undefined
+  onClick?: () => void
 }
 
 export default function DashboardMenuItem(props: DashboardMenuItemProps) {
@@ -22,22 +20,22 @@ export default function DashboardMenuItem(props: DashboardMenuItemProps) {
   const currentUrl = router.asPath
   const {
     item,
-    hasChildren = false,
+    hasSubmenu = false,
+    children = null,
     pl = 2,
-    open,
+    selected: selectedFromParent = false,
     onClick,
-    selected: selectedFromParent = false
   } = props
   const route = 'route' in item ? item.route : ''
   const selected =
       currentUrl === route ||
       !!route && route !== '/dashboard' && currentUrl.includes(route)
 
-  function clickHandler(event: MouseEvent<HTMLElement>): void {
+  function handleClick(event: MouseEvent<HTMLElement>): void {
     event.preventDefault()
 
-    if (hasChildren && onClick) {
-      onClick(!open)
+    if (hasSubmenu && onClick) {
+      onClick()
     } else {
       router.push(route)
     }
@@ -47,14 +45,14 @@ export default function DashboardMenuItem(props: DashboardMenuItemProps) {
       <ListItemButton
           href={route}
           sx={{ pl }}
-          onClick={clickHandler}
+          onClick={handleClick}
           selected={selected || selectedFromParent}
       >
         <ListItemIcon sx={{ minWidth: '32px' }}>
-          <props.item.icon sx={{ fontSize: 'medium' }} />
+          <item.icon sx={{ fontSize: 'medium' }} />
         </ListItemIcon>
         <ListItemText primary={item.name} primaryTypographyProps={{ fontSize: '0.9rem' }} />
-        {hasChildren ? open ? <ExpandLess /> : <ExpandMore /> : null}
+        {children}
       </ListItemButton>
   )
 }

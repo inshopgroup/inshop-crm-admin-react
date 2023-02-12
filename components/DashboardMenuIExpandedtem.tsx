@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState} from 'react'
 import { useRouter } from 'next/router'
 import List from '@mui/material/List'
 import Collapse from '@mui/material/Collapse'
 import DashboardMenuItem from './DashboardMenuItem'
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
 
 import type { IMenuItemExpanded } from '../model/IMenuItem'
 
@@ -14,9 +16,9 @@ export default function DashboardMenuExpandedItem(props: DashboardMenuExpandedIt
   const { item } = props
   const router = useRouter()
   const currentUrl = router.asPath
+  const hasSubmenu = item.children?.length > 0
   const [open, setOpen] = useState<boolean>(false)
   const [selected, setSelected] = useState<boolean>(false)
-  const hasChildren = item.children?.length > 0
 
   useEffect(() => {
     const selected =
@@ -32,17 +34,18 @@ export default function DashboardMenuExpandedItem(props: DashboardMenuExpandedIt
     }
   }, [item, currentUrl])
 
-  return hasChildren ? (
+  return hasSubmenu ? (
       <>
         <DashboardMenuItem
             item={item}
-            hasChildren={hasChildren}
-            open={open}
-            onClick={setOpen}
+            hasSubmenu={hasSubmenu}
+            onClick={() => setOpen(!open)}
             selected={selected && !open}
-        />
+        >
+          {open ? <ExpandLess /> : <ExpandMore />}
+        </DashboardMenuItem>
 
-        <Collapse in={open} timeout="auto" unmountOnExit>
+        <Collapse in={open}>
           <List component="div" disablePadding>
             {item.children.map((child, index) => (
                 <DashboardMenuItem
