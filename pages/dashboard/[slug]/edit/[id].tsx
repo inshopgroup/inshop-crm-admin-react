@@ -20,6 +20,7 @@ export default function ItemEdit() {
     const [item, setItem] = useState();
     const [model, setModel] = useState<string | null>(null);
     const [violations, setViolations] = useState([]);
+    const [title, setTitle] = useState<string>('');
 
     const { data }: { data?: ModelInterface | undefined; } = useGetItemQuery(
         id && model ? { id: parseInt(id.toString()), '@type': model } : skipToken
@@ -27,6 +28,7 @@ export default function ItemEdit() {
 
     useEffect(() => {
       if (data) {
+        setTitle(data.name)
         setItem(data)
       }
     }, [data])
@@ -64,7 +66,7 @@ export default function ItemEdit() {
     return (
         item && headCells &&
         <>
-            <PageHeader title={item.name}></PageHeader>
+            <PageHeader title={title}></PageHeader>
 
             <BaseForm
                 headCells={headCells}
