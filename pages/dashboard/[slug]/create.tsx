@@ -21,12 +21,15 @@ export default function ItemEdit() {
     const [headCells, setHeadCells] = useState<readonly HeadCell[] | null>(null);
 
     if (slug && headCells === null) {
+      try {
         const _model = geModelByRoute(slug.toString())
+        const modelImported = require(`../../../model/${_model}`)
 
-        import(`../../../model/${_model}`).then((modelImported) => {
-            setItem(new modelImported.default)
-            setHeadCells(modelImported.headCells)
-        });
+        setItem(new modelImported.default)
+        setHeadCells(modelImported.headCells)
+      } catch (e) {
+        return `Something went wrong ${e}`
+      }
     }
 
     const onChange = (e: any) => {

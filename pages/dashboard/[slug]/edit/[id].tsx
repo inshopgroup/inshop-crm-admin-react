@@ -1,9 +1,8 @@
-import * as React from 'react';
+import { useEffect, useState } from 'react';
 import {useGetItemQuery, useEditItemMutation} from "../../../../store/crud";
 import {useRouter} from "next/router";
 import PageHeader from "../../../../layouts/PageHeader";
 import {skipToken} from "@reduxjs/toolkit/query";
-import {useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import BaseForm from "../../../../components/BaseForm";
 import {proceedResponse} from "../../../../components/forms/FormHelper";
@@ -20,16 +19,6 @@ export default function ItemEdit() {
     const [headCells, setHeadCells] = useState<readonly HeadCell[] | null>(null);
     const [item, setItem] = useState();
     const [model, setModel] = useState<string | null>(null);
-
-    if (slug && headCells === null) {
-        const _model = geModelByRoute(slug.toString())
-
-        import(`../../../../model/${_model}`).then((modelImported) => {
-            setHeadCells(modelImported.headCells)
-            setModel(_model)
-        });
-    }
-
     const [violations, setViolations] = useState([]);
 
     const { data }: { data?: ModelInterface | undefined; } = useGetItemQuery(
@@ -37,10 +26,22 @@ export default function ItemEdit() {
     )
 
     useEffect(() => {
-        if (data) {
-            setItem(data)
-        }
+      if (data) {
+        setItem(data)
+      }
     }, [data])
+
+    if (slug && headCells === null) {
+      try {
+        const _model = geModelByRoute(slug.toString())
+        const modelImported = require(`../../../../model/${_model}`)
+
+        setHeadCells(modelImported.headCells)
+        setModel(_model)
+      } catch (e) {
+        return `Something went wrong ${e}`
+      }
+    }
 
     const onChange = (e: any) => {
         setItem({
