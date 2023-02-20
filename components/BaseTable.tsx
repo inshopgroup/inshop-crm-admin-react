@@ -1,4 +1,13 @@
-import * as React from 'react';
+import {
+  useState,
+  MouseEvent,
+  ChangeEvent,
+} from 'react'
+import {useDispatch} from "react-redux";
+import {setSnackbar} from "../store/loaderSlice";
+import { getTableCellData } from '../utils'
+
+import Link from "next/link";
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,9 +24,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
-import Link from "next/link";
-import {setSnackbar} from "../store/loaderSlice";
-import {useDispatch} from "react-redux";
 import {allowedModels, getRouteByModel} from "../model/ModelInterface";
 
 type Order = 'asc' | 'desc';
@@ -32,7 +38,7 @@ export interface HeadCell {
 }
 
 interface EnhancedTableProps {
-    onRequestSort: (event: React.MouseEvent<unknown>, property: string) => void;
+    onRequestSort: (event: MouseEvent<unknown>, property: string) => void;
     order: Order;
     orderBy: string;
     rowCount: number;
@@ -42,7 +48,7 @@ interface EnhancedTableProps {
 function EnhancedTableHead(props: EnhancedTableProps) {
     const { order, orderBy, onRequestSort } = props;
     const createSortHandler =
-        (property: string) => (event: React.MouseEvent<unknown>) => {
+        (property: string) => (event: MouseEvent<unknown>) => {
             onRequestSort(event, property);
         };
 
@@ -89,10 +95,10 @@ interface BaseTableProps {
 }
 
 export default function BaseTable(props: BaseTableProps) {
-    const [order, setOrder] = React.useState<Order>('desc');
-    const [orderBy, setOrderBy] = React.useState<string>('id');
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(25);
+    const [order, setOrder] = useState<Order>('desc');
+    const [orderBy, setOrderBy] = useState<string>('id');
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
 
     const dispatch = useDispatch();
 
@@ -125,7 +131,7 @@ export default function BaseTable(props: BaseTableProps) {
     }
 
     const handleRequestSort = (
-        event: React.MouseEvent<unknown>,
+        event: MouseEvent<unknown>,
         property: string,
     ) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -137,7 +143,7 @@ export default function BaseTable(props: BaseTableProps) {
         setPage(newPage);
     };
 
-    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChangeRowsPerPage = (event: ChangeEvent<HTMLInputElement>) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
     };
@@ -170,7 +176,9 @@ export default function BaseTable(props: BaseTableProps) {
                                         {props.headCells.map((headCell, index) => {
                                             return (
                                                 headCell.visibleInList &&
-                                                <TableCell key={row.id + '_' + index}>{row[headCell.id].toString()}</TableCell>
+                                                <TableCell key={row.id + '_' + index}>
+                                                  {getTableCellData(row[headCell.id], headCell.id)}
+                                                </TableCell>
                                             )
                                         })}
                                         <TableCell key={row.id + '_actions'} sx={{maxWidth: 100}}>
