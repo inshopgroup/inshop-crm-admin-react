@@ -5,15 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import Button from "@mui/material/Button";
 import {signOut, useSession} from "next-auth/react";
 import PageFooter from "./PageFooter";
@@ -21,6 +13,8 @@ import {Alert, LinearProgress} from "@mui/material";
 import {selectErrorState, selectLoaderState, setError} from "../store/loaderSlice";
 import {useDispatch, useSelector} from "react-redux";
 import SnackbarAlert from "./SnackbarAlert";
+import { menu as menuItems } from '../helpers/nav'
+import DashboardMenu from "../components/DashboardMenu";
 
 const drawerWidth = 240;
 
@@ -46,7 +40,7 @@ export default function DefaultLayout({ children }) {
     const showLoader = useSelector(selectLoaderState) !== 0
     const error = useSelector(selectErrorState)
 
-    const handleAlertClose = () => {
+    const handleAlertClose = (): void => {
        dispatch(setError(null))
     }
 
@@ -82,31 +76,7 @@ export default function DefaultLayout({ children }) {
             >
                 <Toolbar />
                 <Box sx={{ overflow: 'auto' }}>
-                    <List>
-                        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                    <Divider />
-                    <List>
-                        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
+                    <DashboardMenu items={menuItems} />
                 </Box>
             </Drawer>
             <Main>
