@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
-import {useGetItemQuery, useEditItemMutation} from "../../../../store/crud";
 import {useRouter} from "next/router";
-import PageHeader from "../../../../layouts/PageHeader";
-import {skipToken} from "@reduxjs/toolkit/query";
 import {useDispatch} from "react-redux";
+import {skipToken} from "@reduxjs/toolkit/query";
+import {useGetItemQuery, useEditItemMutation} from "../../../../store/crud";
+
+import PageHeader from "../../../../layouts/PageHeader";
 import BaseForm from "../../../../components/BaseForm";
 import {proceedResponse} from "../../../../components/forms/FormHelper";
 import {HeadCell} from "../../../../components/BaseTable";
 import {geModelByRoute, ModelInterface} from "../../../../model/ModelInterface";
+import PageAction from "../../../../components/PageAction";
 
 export default function ItemEdit() {
     const router = useRouter()
-    const { slug, id } = router.query
+    const { slug, id: paramId }: { slug?: string; id?: string } = router.query
+    const id = paramId ? parseInt(paramId.toString()) : undefined
 
     const dispatch = useDispatch()
     const [editItem, { isLoading }] = useEditItemMutation()
@@ -23,7 +26,7 @@ export default function ItemEdit() {
     const [title, setTitle] = useState<string>('');
 
     const { data }: { data?: ModelInterface | undefined; } = useGetItemQuery(
-        id && model ? { id: parseInt(id.toString()), '@type': model } : skipToken
+        id && model ? { id, '@type': model } : skipToken
     )
 
     useEffect(() => {
@@ -74,7 +77,18 @@ export default function ItemEdit() {
                 violations={violations}
                 item={item}
                 onChange={onChange}
-            ></BaseForm>
+            >
+              {id &&
+                  slug &&
+                  model &&
+                <PageAction
+                  id={id}
+                  slug={slug}
+                  model={model}
+                  editMode
+                />
+              }
+            </BaseForm>
         </>
     );
 }
