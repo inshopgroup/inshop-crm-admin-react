@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -15,6 +14,7 @@ import {useDispatch, useSelector} from "react-redux";
 import SnackbarAlert from "./SnackbarAlert";
 import { menu as menuItems } from '../helpers/nav'
 import DashboardMenu from "../components/DashboardMenu";
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew'
 
 const drawerWidth = 240;
 
@@ -62,7 +62,13 @@ export default function DefaultLayout({ children }) {
                         Inshop CRM
                     </Typography>
                     <Typography>{session?.user?.name}</Typography>
-                    <Button onClick={() => signOut()} color="inherit">[ Logout ]</Button>
+                    <Button
+                        color="inherit"
+                        startIcon={<PowerSettingsNewIcon />}
+                        onClick={() => signOut()}
+                    >
+                      Logout
+                    </Button>
                 </Toolbar>
             </MuiAppBar>
             <CssBaseline />
