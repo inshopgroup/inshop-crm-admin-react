@@ -11,6 +11,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import SaveIcon from '@mui/icons-material/Save'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import AddIcon from '@mui/icons-material/Add'
 
 interface PageActionProps {
   id?: number
@@ -64,16 +65,21 @@ export default function PageAction(props: PageActionProps) {
           alignItems="center"
       >
         <Grid item md={2} xs={12}>
-          {!id && (editMode || createMode) ?
-              <Button type="submit" variant="contained" color="success">
-                {editMode ? 'Save' : 'Submit'}
+          {editMode || createMode ?
+              <Button
+                  type="submit"
+                  variant="contained"
+                  color="success"
+                  startIcon={editMode ? <SaveIcon /> : <AddIcon />}
+              >
+                {editMode ? 'Save' : 'Add'}
               </Button> :
               <Button
                   variant="contained"
-                  startIcon={editMode ? <SaveIcon /> : <EditIcon />}
+                  startIcon={<EditIcon />}
                   onClick={() => router.push(`/dashboard/${slug}/edit/${id}`)}
               >
-                {editMode ? 'Save' : 'Edit'}
+                Edit
               </Button>
           }
         </Grid>
