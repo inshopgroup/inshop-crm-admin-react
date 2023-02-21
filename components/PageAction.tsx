@@ -6,6 +6,11 @@ import { useDeleteItemMutation } from '../store/crud'
 
 import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
+import SaveIcon from '@mui/icons-material/Save'
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 
 interface PageActionProps {
   id?: number
@@ -65,6 +70,7 @@ export default function PageAction(props: PageActionProps) {
               </Button> :
               <Button
                   variant="contained"
+                  startIcon={editMode ? <SaveIcon /> : <EditIcon />}
                   onClick={() => router.push(`/dashboard/${slug}/edit/${id}`)}
               >
                 {editMode ? 'Save' : 'Edit'}
@@ -84,6 +90,7 @@ export default function PageAction(props: PageActionProps) {
             <Button
                 type="submit"
                 variant="contained"
+                startIcon={<FormatListBulletedIcon />}
                 onClick={goToList}
             >
               Back to list
@@ -93,6 +100,7 @@ export default function PageAction(props: PageActionProps) {
               <Button
                 type="submit"
                 variant="contained"
+                startIcon={<VisibilityIcon />}
                 onClick={() => router.push(`/dashboard/${slug}/show/${id}`)}
               >
                 Show
@@ -105,6 +113,7 @@ export default function PageAction(props: PageActionProps) {
                 type="submit"
                 variant="contained"
                 color="error"
+                startIcon={<DeleteIcon />}
                 onClick={handleDelete}
             >
               Delete
