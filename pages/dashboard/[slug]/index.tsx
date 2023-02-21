@@ -19,12 +19,15 @@ export default function CrudIndex() {
     const [model, setModel] = useState<string | null>(null);
 
     if (slug && headCells === null) {
+      try {
         const _model = geModelByRoute(slug.toString())
+        const modelImported = require(`../../../model/${_model}`)
 
-        import(`../../../model/${_model}`).then((modelImported) => {
-            setHeadCells(modelImported.headCells)
-            setModel(_model)
-        });
+        setHeadCells(modelImported.headCells)
+        setModel(_model)
+      } catch (e) {
+        return `Something went wrong ${e}`
+      }
     }
 
     const actions = () => {
