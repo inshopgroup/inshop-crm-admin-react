@@ -8,17 +8,19 @@ import {proceedResponse} from "../../../components/forms/FormHelper";
 import {useRouter} from "next/router";
 import {HeadCell} from "../../../components/BaseTable";
 import {geModelByRoute, ModelInterface} from "../../../model/ModelInterface";
+import PageAction from "../../../components/PageAction";
 
 export default function ItemEdit() {
     const dispatch = useDispatch()
     const router = useRouter()
-    const { slug } = router.query
+    const { slug }: { slug?: string } = router.query
 
     const [addItem] = useAddItemMutation()
 
     const [item, setItem] = useState<ModelInterface | null>(null);
     const [violations, setViolations] = useState([]);
     const [headCells, setHeadCells] = useState<readonly HeadCell[] | null>(null);
+    const [model, setModel] = useState<string | null>(null);
 
     if (slug && headCells === null) {
       try {
@@ -26,6 +28,7 @@ export default function ItemEdit() {
         const modelImported = require(`../../../model/${_model}`)
 
         setItem(new modelImported.default)
+        setModel(_model)
         setHeadCells(modelImported.headCells)
       } catch (e) {
         return `Something went wrong ${e}`
@@ -66,7 +69,15 @@ export default function ItemEdit() {
                         violations={violations}
                         item={item}
                         onChange={onChange}
-                    ></BaseForm>
+                    >
+                      {slug && model &&
+                        <PageAction
+                          slug={slug}
+                          model={model}
+                          createMode
+                        />
+                      }
+                    </BaseForm>
                 </>
             }
         </>

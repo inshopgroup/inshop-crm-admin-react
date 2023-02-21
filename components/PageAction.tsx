@@ -8,14 +8,21 @@ import Grid from '@mui/material/Grid'
 import Button from '@mui/material/Button'
 
 interface PageActionProps {
-  id: number
+  id?: number
   slug: string
   model: string
   editMode?: boolean
+  createMode?: boolean
 }
 
 export default function PageAction(props: PageActionProps) {
-  const { id, slug, model, editMode = false } = props
+  const {
+    id,
+    slug,
+    model,
+    editMode = false,
+    createMode = false
+  } = props
   const router = useRouter()
   const dispatch = useDispatch()
   const [deleteItem] = useDeleteItemMutation()
@@ -52,13 +59,15 @@ export default function PageAction(props: PageActionProps) {
           alignItems="center"
       >
         <Grid item md={2} xs={12}>
-          {editMode ?
-              <Button type="submit" variant="contained" color="success">Save</Button> :
+          {!id && (editMode || createMode) ?
+              <Button type="submit" variant="contained" color="success">
+                {editMode ? 'Save' : 'Submit'}
+              </Button> :
               <Button
                   variant="contained"
                   onClick={() => router.push(`/dashboard/${slug}/edit/${id}`)}
               >
-                Edit
+                {editMode ? 'Save' : 'Edit'}
               </Button>
           }
         </Grid>
@@ -80,7 +89,7 @@ export default function PageAction(props: PageActionProps) {
               Back to list
             </Button>
           </Grid>
-          {editMode && <Grid item>
+          {id && !createMode && editMode && <Grid item>
               <Button
                 type="submit"
                 variant="contained"
@@ -91,15 +100,16 @@ export default function PageAction(props: PageActionProps) {
             </Grid>
           }
         </Grid>
-        <Grid item>
-          <Button
-              type="submit"
-              variant="contained"
-              color="error"
-              onClick={handleDelete}
-          >
-            Delete
-          </Button>
+        <Grid container item md={2} xs={12} justifyContent="flex-end">
+          {!createMode && <Button
+                type="submit"
+                variant="contained"
+                color="error"
+                onClick={handleDelete}
+            >
+              Delete
+            </Button>
+          }
         </Grid>
       </Grid>
   )
