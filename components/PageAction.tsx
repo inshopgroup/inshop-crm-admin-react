@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useRouter } from 'next/router'
 
@@ -12,6 +13,8 @@ import SaveIcon from '@mui/icons-material/Save'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import AddIcon from '@mui/icons-material/Add'
+
+import ConfirmDialog from '../components/ConfirmDialog'
 
 interface PageActionProps {
   id?: number
@@ -29,32 +32,32 @@ export default function PageAction(props: PageActionProps) {
     editMode = false,
     createMode = false
   } = props
+  const [openDialog, setOpenDialog] = useState(false)
   const router = useRouter()
   const dispatch = useDispatch()
   const [deleteItem] = useDeleteItemMutation()
 
   const handleDelete = () => {
-    if (confirm('Are you sure?')) {
-      const item = {
-        id,
-        '@type': model
-      }
+    setOpenDialog(false)
 
-      deleteItem(item).then((response: any) => {
-        if (!response.error) {
-          dispatch(setSnackbar({
-            message: 'Successfully deleted',
-            severity: 'success',
-          }))
-
-          goToList()
-        }
-      })
+    const item = {
+      id,
+      '@type': model
     }
+
+    deleteItem(item).then(async (response: any) => {
+      if (!response.error) {
+        await goToList()
+        dispatch(setSnackbar({
+          message: 'Successfully deleted',
+          severity: 'success',
+        }))
+      }
+    })
   }
 
-  function goToList(): void {
-    router.push(`/dashboard/${slug}`)
+  function goToList(): Promise<any> {
+    return router.push(`/dashboard/${slug}`)
   }
 
   return (
@@ -117,12 +120,18 @@ export default function PageAction(props: PageActionProps) {
                 variant="contained"
                 color="error"
                 startIcon={<DeleteIcon />}
-                onClick={handleDelete}
+                onClick={() => setOpenDialog(true)}
             >
               Delete
             </Button>
           }
         </Grid>
+
+        <ConfirmDialog
+            open={openDialog}
+            handleSubmit={handleDelete}
+            handleClose={() => setOpenDialog(false)}
+        ></ConfirmDialog>
       </Grid>
   )
 }
