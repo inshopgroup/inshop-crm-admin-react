@@ -94,7 +94,6 @@ export default function PageAction(props: PageActionProps) {
         >
           <Grid item>
             <Button
-                type="submit"
                 variant="contained"
                 startIcon={<FormatListBulletedIcon />}
                 onClick={goToList}
@@ -104,7 +103,6 @@ export default function PageAction(props: PageActionProps) {
           </Grid>
           {id && !createMode && editMode && <Grid item>
               <Button
-                type="submit"
                 variant="contained"
                 startIcon={<VisibilityIcon />}
                 onClick={() => router.push(`/dashboard/${slug}/show/${id}`)}
@@ -116,7 +114,6 @@ export default function PageAction(props: PageActionProps) {
         </Grid>
         <Grid container item md={2} xs={12} justifyContent="flex-end">
           {!createMode && <Button
-                type="submit"
                 variant="contained"
                 color="error"
                 startIcon={<DeleteIcon />}
