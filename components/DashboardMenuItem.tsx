@@ -8,10 +8,10 @@ import type { IMenuItemExpanded, IMenuItemSimple } from '../model/IMenuItem'
 
 interface DashboardMenuItemProps {
   item: IMenuItemSimple | IMenuItemExpanded
-  hasSubmenu?: boolean | undefined
-  children?: ReactNode | null
-  pl?: number | undefined
-  selected?: boolean | undefined
+  hasSubmenu?: boolean
+  children?: ReactNode
+  pl?: number
+  selected?: boolean
   onClick?: () => void
 }
 
