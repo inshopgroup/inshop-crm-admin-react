@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
-import sliceReducer, { loaderSlice } from "./loaderSlice";
+import loaderReducer, { loaderSlice } from "./loaderSlice";
 import { createWrapper } from "next-redux-wrapper";
 import {crudApi} from "./crud";
 
 const makeStore = () =>
     configureStore({
         reducer: {
-            [loaderSlice.name]: sliceReducer,
+            [loaderSlice.name]: loaderReducer,
             [crudApi.reducerPath]: crudApi.reducer,
         },
         devTools: true,
