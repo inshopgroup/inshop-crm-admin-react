@@ -27,12 +27,16 @@ export const initAxios = async (store: ToolkitStore) => {
         store.dispatch(loadingStop())
 
         return response;
-    }, error => {
+    }, async (error) => {
+        const session = await getSession()
+
         store.dispatch(loadingStop())
         store.dispatch(setError("Something went wrong, can't proceed request"))
 
-        if (error.response.status === 401) {
-            signOut();
+        if (session) {
+            if (error.response.status === 401) {
+                await signOut();
+            }
         }
 
         return Promise.reject(error);
